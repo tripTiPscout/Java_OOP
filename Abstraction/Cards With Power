@@ -52,7 +52,7 @@ enum CardRanks {
     QUEEN(12),
     KING(13);
 
-    private int value;
+    private final int value;
 
     CardRanks(int value) {
         this.value = value;
