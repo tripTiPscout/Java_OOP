@@ -64,8 +64,8 @@ enum CardRanks {
 }
 
 class Card {
-    private CardSuits cardSuit;
-    private CardRanks cardRank;
+    private final CardSuits cardSuit;
+    private final CardRanks cardRank;
 
     public Card(CardSuits cardSuit, CardRanks cardRank) {
         this.cardSuit = cardSuit;
