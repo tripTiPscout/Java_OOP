@@ -26,7 +26,7 @@ enum CardSuits {
     HEARTS(26),
     SPADES(39);
 
-    private int value;
+    private final int value;
 
     CardSuits(int value) {
         this.value = value;
