@@ -1,0 +1,101 @@
+package Advanced;
+
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String[] reservationsData = scanner.nextLine().split("\\s+");
+
+        double pricePerDay = Double.parseDouble(reservationsData[0]);
+        int days = Integer.parseInt(reservationsData[1]);
+        String season = reservationsData[2];
+        String discount = reservationsData[3];
+
+        PriceCalculator calculator = new PriceCalculator
+                (pricePerDay, days, Season.fromString(season), Discount.fromString(discount));
+
+        System.out.printf("%.2f", calculator.calculatePrice());
+    }
+}
+
+enum Season {
+    AUTUMN(1),
+    SPRING(2),
+    WINTER(3),
+    SUMMER(4);
+
+    private final int multiplier;
+
+    Season(int multiplier) {
+        this.multiplier = multiplier;
+    }
+
+    public int getMultiplier() {
+        return multiplier;
+    }
+
+    public static Season fromString(String seasonAsString) {
+
+        //return Season.valueOf(seasonAsString.toUpperCase());
+
+        return switch (seasonAsString) {
+            case "Autumn" -> AUTUMN;
+            case "Spring" -> SPRING;
+            case "Winter" -> WINTER;
+            case "Summer" -> SUMMER;
+            default -> throw new IllegalStateException("Unexpected value: " + seasonAsString);
+        };
+    }
+}
+
+enum Discount {
+    VIP(0.2),
+    SECOND_VISIT(0.1),
+    NONE(0.0);
+
+    private double percentage;
+
+    Discount(double percentage) {
+        this.percentage = percentage;
+    }
+
+    public double getPercentage() {
+        return percentage;
+    }
+
+    public static Discount fromString(String discountAsString) {
+
+        //return Discount.valueOf(discountAsString.toUpperCase()); - няма да работи за SECOND_VISIT
+
+        return switch (discountAsString) {
+            case "VIP" -> VIP;
+            case "SecondVisit" -> SECOND_VISIT;
+            case "None" -> NONE;
+            default -> throw new IllegalStateException("Unexpected value: " + discountAsString);
+        };
+    }
+}
+
+class PriceCalculator {
+    private double pricePerDay;
+    private int days;
+    private Season season;
+    private Discount discount;
+
+    public PriceCalculator(double pricePerDay, int days, Season season, Discount discount) {
+        this.pricePerDay = pricePerDay;
+        this.days = days;
+        this.season = season;
+        this.discount = discount;
+    }
+
+    public double calculatePrice() {
+        int multiplier = season.getMultiplier();
+
+        double percentDiscount = discount.getPercentage();
+
+        return pricePerDay * days * multiplier * (1 - percentDiscount);
+    }
+}
