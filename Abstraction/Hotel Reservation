@@ -55,7 +55,7 @@ enum Discount {
     SECOND_VISIT(0.1),
     NONE(0.0);
 
-    private double percentage;
+    private final double percentage;
 
     Discount(double percentage) {
         this.percentage = percentage;
