@@ -37,9 +37,6 @@ enum Season {
     }
 
     public static Season fromString(String seasonAsString) {
-
-        //return Season.valueOf(seasonAsString.toUpperCase());
-
         return switch (seasonAsString) {
             case "Autumn" -> AUTUMN;
             case "Spring" -> SPRING;
@@ -66,9 +63,6 @@ enum Discount {
     }
 
     public static Discount fromString(String discountAsString) {
-
-        //return Discount.valueOf(discountAsString.toUpperCase()); - няма да работи за SECOND_VISIT
-
         return switch (discountAsString) {
             case "VIP" -> VIP;
             case "SecondVisit" -> SECOND_VISIT;
