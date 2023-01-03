@@ -1,0 +1,120 @@
+package Advanced;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        long capacity = Long.parseLong(scanner.nextLine());
+        String[] input = scanner.nextLine().split("\\s+");
+
+        Bag bag = new Bag(capacity);
+
+        fillBag(input, bag);
+
+        System.out.println(bag);
+    }
+
+    private static void fillBag(String[] input, Bag bag) {
+        for (int i = 0; i < input.length; i += 2) {
+            String item = input[i];
+            long quantity = Long.parseLong(input[i + 1]);
+
+            if (item.length() == 3) {
+                bag.addCash(item,quantity);
+            } else if (item.toLowerCase().endsWith("gem")) {
+                bag.addGems(item, quantity);
+            } else if (item.equalsIgnoreCase("gold")) {
+                bag.addGold(quantity);
+            }
+        }
+    }
+}
+
+class Bag {
+    private long capacity;
+    private long currentWeight;
+    private long totalGold;
+    private long totalGems;
+    private Map<String, Long> gems;
+    private long totalCash;
+    private Map<String, Long> cash;
+
+    public Bag(long capacity) {
+        this.capacity = capacity;
+        this.currentWeight = 0;
+        this.totalGold = 0;
+        this.totalGems = 0;
+        this.gems = new HashMap<>();
+        this.totalCash = 0;
+        this.cash = new HashMap<>();
+    }
+
+    public void addCash(String currency, long quantity) {
+        if (hasFreeSpace(quantity) && this.totalGems >= this.totalCash + quantity) {
+            addItem(currency, quantity, this.cash);
+            this.totalCash += quantity;
+        }
+    }
+
+    public void addGems(String gem, long quantity) {
+        if (hasFreeSpace(quantity) && this.totalGold >= this.totalGems + quantity) {
+            addItem(gem, quantity, this.gems);
+            this.totalGems += quantity;
+        }
+    }
+
+    private void addItem(String item, long quantity, Map<String, Long> items) {
+        if (!items.containsKey(item)) {
+            items.put(item, quantity);
+        } else {
+            items.put(item, items.get(item) + quantity);
+        }
+        this.currentWeight += quantity;
+    }
+
+    public void addGold(long quantity) {
+        if (this.hasFreeSpace(quantity)) {
+            this.totalGold += quantity;
+            this.currentWeight += quantity;
+        }
+    }
+
+    public boolean hasFreeSpace(long quantity) {
+        return this.currentWeight + quantity <= this.capacity;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder printOut = new StringBuilder();
+        if (this.totalGold >= 0) {
+            printOut.append("<Gold> $").append(this.totalGold).append(System.lineSeparator());
+            printOut.append("##Gold - ").append(this.totalGold).append(System.lineSeparator());
+        }
+        if (this.gems.size() > 0) {
+            printOut.append("<Gem> $").append(this.totalGems).append(System.lineSeparator());
+            this.gems.entrySet().stream().sorted((f, s) -> {
+                int result = s.getKey().compareTo(f.getKey());
+                if (result == 0) {
+                    result = f.getValue().compareTo(s.getValue());
+                }
+                return result;
+            }).forEach(entry -> printOut.append("##").append(entry.getKey()).append(" - ").append(entry.getValue()).append(System.lineSeparator()));
+        }
+        if (this.cash.size() > 0) {
+            printOut.append("<Cash> $").append(this.totalCash).append(System.lineSeparator());
+            this.cash.entrySet().stream().sorted((f, s) -> {
+                int result = s.getKey().compareTo(f.getKey());
+                if (result == 0) {
+                    result = f.getValue().compareTo(s.getValue());
+                }
+                return result;
+            }).forEach(entry -> printOut.append("##").append(entry.getKey()).append(" - ").append(entry.getValue()).append(System.lineSeparator()));
+        }
+        return printOut.toString().trim();
+    }
+}
