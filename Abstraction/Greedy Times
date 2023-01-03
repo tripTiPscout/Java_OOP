@@ -36,13 +36,13 @@ public class Main {
 }
 
 class Bag {
-    private long capacity;
+    private final long capacity;
     private long currentWeight;
     private long totalGold;
     private long totalGems;
-    private Map<String, Long> gems;
+    private final Map<String, Long> gems;
     private long totalCash;
-    private Map<String, Long> cash;
+    private final Map<String, Long> cash;
 
     public Bag(long capacity) {
         this.capacity = capacity;
