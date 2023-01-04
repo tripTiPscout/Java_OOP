@@ -1,0 +1,163 @@
+package Advanced;
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        Fields fields = getFields(scanner);
+
+        printCollectedStars(scanner, fields);
+    }
+
+    private static void printCollectedStars(Scanner scanner, Fields fields) {
+        long starsCollected = collectStars(scanner, fields);
+
+        System.out.println(starsCollected);
+    }
+
+    private static Fields getFields(Scanner scanner) {
+        int[] dimensions = readPositions(scanner.nextLine());
+
+        int rows = dimensions[0];
+        int cols = dimensions[1];
+
+        return new Fields(rows, cols);
+    }
+
+    private static long collectStars(Scanner scanner, Fields fields) {
+        long starsCollected = 0;
+        
+        String command = scanner.nextLine();
+
+        while (!command.equals("Let the Force be with you")) {
+            int[] jediPosition = readPositions(command);
+            int[] evilPosition = readPositions(scanner.nextLine());
+
+            int rowEvil = evilPosition[0];
+            int colEvil = evilPosition[1];
+            Evil evil = new Evil(rowEvil, colEvil);
+
+            int rowJedi = jediPosition[0];
+            int colJedi = jediPosition[1];
+            Jedi jedi = new Jedi(rowJedi, colJedi);
+
+            Galaxy galaxy = new Galaxy(fields, jedi, evil);
+            
+            galaxy.moveEvil(rowEvil, colEvil);
+            starsCollected = galaxy.moveJedi(rowJedi, colJedi);
+
+            command = scanner.nextLine();
+        }
+        return starsCollected;
+    }
+
+    private static int[] readPositions(String inputLine) {
+        return Arrays.stream(inputLine.split("\\s+"))
+                .mapToInt(Integer::parseInt)
+                .toArray();
+    }
+}
+
+class Fields {
+    private int[][] matrix;
+
+    public Fields(int rows, int cols) {
+        this(rows, cols, 0);
+    }
+
+    public Fields(int rows, int cols, int startValue) {
+        this.matrix = new int[rows][cols];
+        this.fillValues(startValue);
+    }
+
+    private void fillValues(int startValue) {
+        for (int row = 0; row < this.matrix.length; row++) {
+            for (int col = 0; col < this.matrix[row].length; col++) {
+                this.matrix[row][col] = startValue++;
+            }
+        }
+    }
+
+    public boolean isInBounds(int row, int col) {
+        return row >= 0 && row < this.matrix.length && col >= 0 && col < this.matrix[row].length;
+    }
+
+    public int getValue(int row, int col) {
+        return this.matrix[row][col];
+    }
+
+    public void setValue(int row, int col, int newValue) {
+        this.matrix[row][col] = newValue;
+    }
+
+    public int getColLength(int row) {
+        return this.matrix[row].length;
+    }
+}
+
+class Galaxy {
+    private Fields fields;
+    private Jedi jedi;
+    private Evil evil;
+
+    public Galaxy(Fields fields, Jedi jedi, Evil evil) {
+        this.fields = fields;
+        this.jedi = jedi;
+        this.evil = evil;
+    }
+
+    public void moveEvil(int row, int col) {
+        this.evil.move(row, col, this.fields);
+    }
+
+
+    public long moveJedi(int row, int col) {
+        return this.jedi.move(row, col, this.fields);
+    }
+}
+
+class Jedi {
+    private int row;
+    private int col;
+
+    public Jedi(int row, int col) {
+        this.row = row;
+        this.col = col;
+    }
+
+    public long move(int row, int col, Fields fields) {
+        long starsCollected = 0;
+        while (row >= 0 && col < fields.getColLength(1)) {
+            if (fields.isInBounds(row, col)) {
+                starsCollected += fields.getValue(row, col);
+            }
+            col++;
+            row--;
+        }
+        return starsCollected;
+    }
+}
+
+class Evil {
+    private int row;
+    private int col;
+
+    public Evil(int row, int col) {
+        this.row = row;
+        this.col = col;
+    }
+
+    public void move(int row, int col, Fields fields) {
+        while (row >= 0 && col >= 0) {
+            if (fields.isInBounds(row, col)) {
+                fields.setValue(row, col, 0);
+            }
+            row--;
+            col--;
+        }
+    }
+}
