@@ -63,7 +63,7 @@ public class Main {
 }
 
 class Fields {
-    private int[][] matrix;
+    private final int[][] matrix;
 
     public Fields(int rows, int cols) {
         this(rows, cols, 0);
