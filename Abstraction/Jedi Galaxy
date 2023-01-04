@@ -100,9 +100,9 @@ class Fields {
 }
 
 class Galaxy {
-    private Fields fields;
-    private Jedi jedi;
-    private Evil evil;
+    private final Fields fields;
+    private final Jedi jedi;
+    private final Evil evil;
 
     public Galaxy(Fields fields, Jedi jedi, Evil evil) {
         this.fields = fields;
