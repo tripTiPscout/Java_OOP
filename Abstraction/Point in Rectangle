@@ -42,8 +42,8 @@ public class Main {
 }
 
 class Point {
-    private int x;
-    private int y;
+    private final int x;
+    private final int y;
 
     public Point(int x, int y) {
         this.x = x;
@@ -68,8 +68,8 @@ class Point {
 }
 
 class Rectangle {
-    private Point bottomLeft;
-    private Point topRight;
+    private final Point bottomLeft;
+    private final Point topRight;
 
     public Rectangle(Point bottomLeft, Point topRight) {
         this.bottomLeft = bottomLeft;
