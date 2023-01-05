@@ -1,0 +1,83 @@
+package Advanced;
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int[] coordinates = readIntArray(scanner);
+
+        int bottomLeftX = coordinates[0];
+        int bottomLeftY = coordinates[1];
+        int topRightX = coordinates[2];
+        int topRightY = coordinates[3];
+
+        Point bottomLeftPoint = new Point(bottomLeftX, bottomLeftY);
+        Point topRightPoint = new Point(topRightX, topRightY);
+        Rectangle rectangle = new Rectangle(bottomLeftPoint, topRightPoint);
+
+        int inputLines = Integer.parseInt(scanner.nextLine());
+
+        for (int i = 1; i <= inputLines; i++) {
+            int[] pointCoordinates = readIntArray(scanner);
+
+            int xCoordinate = pointCoordinates[0];
+            int yCoordinate = pointCoordinates[1];
+
+            Point pointToCheck = new Point(xCoordinate, yCoordinate);
+
+            boolean result = rectangle.contains(pointToCheck);
+
+            System.out.println(result);
+        }
+    }
+
+    private static int[] readIntArray(Scanner scanner) {
+        return Arrays.stream(scanner.nextLine().split("\\s+"))
+                .mapToInt(Integer::parseInt)
+                .toArray();
+    }
+}
+
+class Point {
+    private int x;
+    private int y;
+
+    public Point(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public boolean isLessOrEqual(Point point) {
+        return point.getX() <= getX() && point.y <= this.y;// пример с и без get-er
+    }
+
+    public boolean isGreaterOrEqual(Point point) {
+        return point.x >= this.x && point.getY() >= getY();// пример с и без get-er
+    }
+}
+
+class Rectangle {
+    private Point bottomLeft;
+    private Point topRight;
+
+    public Rectangle(Point bottomLeft, Point topRight) {
+        this.bottomLeft = bottomLeft;
+        this.topRight = topRight;
+    }
+
+    public boolean contains(Point point) {
+        return this.bottomLeft.isGreaterOrEqual(point)
+                && this.topRight.isLessOrEqual(point);
+    }
+}
