@@ -59,11 +59,11 @@ class Point {
     }
 
     public boolean isLessOrEqual(Point point) {
-        return point.getX() <= getX() && point.y <= this.y;// пример с и без get-er
+        return point.getX() <= getX() && point.y <= this.y;
     }
 
     public boolean isGreaterOrEqual(Point point) {
-        return point.x >= this.x && point.getY() >= getY();// пример с и без get-er
+        return point.x >= this.x && point.getY() >= getY();
     }
 }
 
