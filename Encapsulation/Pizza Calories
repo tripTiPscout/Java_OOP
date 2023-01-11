@@ -1,0 +1,202 @@
+package Advanced;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        Pizza pizza = getPizzaFromInputData(scanner);
+        if (pizza == null) return;
+
+        if (trySetDough(scanner, pizza)) return;
+
+        if (tryAddToppings(scanner, pizza)) return;
+
+        printPizzaAndCalories(pizza);
+    }
+
+    private static Pizza getPizzaFromInputData(Scanner scanner) {
+        String[] inputPizzaData = scanner.nextLine().split("\\s+");
+
+        String pizzaName = inputPizzaData[1];
+        int numberOfToppings = Integer.parseInt(inputPizzaData[2]);
+
+        Pizza pizza;
+
+        try {
+            pizza = new Pizza(pizzaName, numberOfToppings);
+        } catch (IllegalArgumentException exception) {
+            System.out.println(exception.getMessage());
+            return null;
+        }
+        return pizza;
+    }
+
+    private static boolean trySetDough(Scanner scanner, Pizza pizza) {
+        String[] inputDoughData = scanner.nextLine().split("\\s+");
+
+        String flourType = inputDoughData[1];
+        String bakingTechnique = inputDoughData[2];
+        double weightFlourInGrams = Double.parseDouble(inputDoughData[3]);
+
+        try {
+            Dough dough = new Dough(flourType, bakingTechnique, weightFlourInGrams);
+            pizza.setDough(dough);
+        } catch (IllegalArgumentException exception) {
+            System.out.println(exception.getMessage());
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean tryAddToppings(Scanner scanner, Pizza pizza) {
+        String command = scanner.nextLine();
+
+        while (!command.equals("END")) {
+            String[] toppingsData = command.split("\\s+");
+
+            String toppingType = toppingsData[1];
+            double weightToppingInGrams = Double.parseDouble(toppingsData[2]);
+
+            try {
+                Topping topping = new Topping(toppingType, weightToppingInGrams);
+                pizza.addTopping(topping);
+            } catch (IllegalArgumentException exception) {
+                System.out.println(exception.getMessage());
+                return true;
+            }
+
+            command = scanner.nextLine();
+        }
+        return false;
+    }
+
+    private static void printPizzaAndCalories(Pizza pizza) {
+        System.out.printf("%s - %.2f", pizza.getName(), pizza.getOverallCalories());
+    }
+
+}
+
+class Pizza {
+    private String name;
+    private Dough dough;
+    private List<Topping> toppings;
+
+    public Pizza(String name, int numberOfToppings) {
+        this.setName(name);
+        this.setToppings(numberOfToppings);
+    }
+
+    private void setToppings(int numberOfToppings) {
+        if (numberOfToppings < 0 || numberOfToppings > 10) {
+            throw new IllegalArgumentException("Number of toppings should be in range [0..10].");
+        }
+        this.toppings = new ArrayList<>(numberOfToppings);
+    }
+
+    private void setName(String name) {
+        if (name == null || name.trim().isEmpty() || name.length() > 15) {
+            throw new IllegalArgumentException("Pizza name should be between 1 and 15 symbols.");
+        }
+        this.name = name;
+    }
+
+    public void setDough(Dough dough) {
+        this.dough = dough;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void addTopping(Topping topping) {
+        this.toppings.add(topping);
+    }
+
+    public double getOverallCalories() {
+        return this.dough.calculateCalories()
+                + this.toppings.stream()
+                .mapToDouble(Topping::calculateCalories)
+                .sum();
+    }
+}
+
+class Dough {
+    private static final Map<String, Double> FLOUR_TYPES_WITH_MODIFIERS =
+            Map.of("White", 1.5, "Wholegrain", 1.0);
+
+    private static final Map<String, Double> BAKING_TECHNIQUES_WITH_MODIFIERS =
+            Map.of("Crispy", 0.9, "Chewy", 1.1, "Homemade", 1.0);
+
+    private String flourType;
+    private String bakingTechnique;
+    private double weight;
+
+    public Dough(String flourType, String bakingTechnique, double weight) {
+        this.setFlourType(flourType);
+        this.setBakingTechnique(bakingTechnique);
+        this.setWeight(weight);
+    }
+
+    private void setFlourType(String flourType) {
+        if (!FLOUR_TYPES_WITH_MODIFIERS.containsKey(flourType)) {
+            throw new IllegalArgumentException("Invalid type of dough.");
+        }
+        this.flourType = flourType;
+    }
+
+    private void setBakingTechnique(String bakingTechnique) {
+        if (!BAKING_TECHNIQUES_WITH_MODIFIERS.containsKey(bakingTechnique)) {
+            throw new IllegalArgumentException("Invalid type of dough.");
+        }
+        this.bakingTechnique = bakingTechnique;
+    }
+
+    private void setWeight(double weight) {
+        if (weight < 1 || weight > 200) {
+            throw new IllegalArgumentException("Dough weight should be in the range [1..200].");
+        }
+        this.weight = weight;
+    }
+
+    public double calculateCalories() {
+        return this.weight * 2 * FLOUR_TYPES_WITH_MODIFIERS.get(this.flourType)
+                * BAKING_TECHNIQUES_WITH_MODIFIERS.get(this.bakingTechnique);
+    }
+}
+
+class Topping {
+    private static final Map<String, Double> TOPPING_TYPES_WITH_MODIFIERS =
+            Map.of("Meat", 1.2, "Veggies", 0.8, "Cheese", 1.1, "Sauce", 0.9);
+
+    private String toppingType;
+    private double weight;
+
+    public Topping(String toppingType, double weight) {
+        this.setToppingType(toppingType);
+        this.setWeight(weight);
+    }
+
+    private void setToppingType(String toppingType) {
+        if (!TOPPING_TYPES_WITH_MODIFIERS.containsKey(toppingType)) {
+            throw new IllegalArgumentException("Cannot place " + toppingType + " on top of your pizza.");
+        }
+        this.toppingType = toppingType;
+    }
+
+    private void setWeight(double weight) {
+        if (weight < 1 || weight > 50) {
+            throw new IllegalArgumentException(this.toppingType + " weight should be in the range [1..50].");
+        }
+        this.weight = weight;
+    }
+
+    public double calculateCalories() {
+        return this.weight * 2 * TOPPING_TYPES_WITH_MODIFIERS.get(this.toppingType);
+    }
+}
