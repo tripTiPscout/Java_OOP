@@ -110,7 +110,7 @@ public class Main {
 class Person {
     private String name;
     private double money;
-    private List<Product> bag;
+    private final List<Product> bag;
 
     public Person(String name, double money) {
         this.setName(name);
