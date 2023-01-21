@@ -119,14 +119,14 @@ class Person {
     }
 
     private void setName(String name) {
-        if (!NameValidator.isValidName(name)) {   //invoke static method by class name
+        if (NameValidator.notValidName(name)) {
             throw new IllegalArgumentException(ConstantMessages.INVALID_NAME_EXCEPTION_MESSAGE);
         }
         this.name = name;
     }
 
     private void setMoney(double money) {
-        if (!NumericValueValidator.isValidValue(money)) {   //invoke static method by class name
+        if (NumericValueValidator.notValidValue(money)) {
             throw new IllegalArgumentException(ConstantMessages.INVALID_VALUE_EXCEPTION_MESSAGE);
         }
         this.money = money;
@@ -161,14 +161,14 @@ class Product {
     }
 
     private void setName(String name) {
-        if (!NameValidator.isValidName(name)) {   //invoke static method by class name
+        if (NameValidator.notValidName(name)) {
             throw new IllegalArgumentException(ConstantMessages.INVALID_NAME_EXCEPTION_MESSAGE);
         }
         this.name = name;
     }
 
     private void setCost(double cost) {
-        if (!NumericValueValidator.isValidValue(cost)) {   //invoke static method by class name
+        if (NumericValueValidator.notValidValue(cost)) {
             throw new IllegalArgumentException(ConstantMessages.INVALID_VALUE_EXCEPTION_MESSAGE);
         }
         this.cost = cost;
@@ -184,26 +184,23 @@ class Product {
 }
 
 class NameValidator {
-    private NameValidator() {
-    }   //private constructor - can not create instances
+    private NameValidator() {}
 
-    public static boolean isValidName(String name) {
-        return name != null && !name.trim().isEmpty() && !name.contains(" ");
+    public static boolean notValidName(String name) {
+        return name == null || name.trim().isEmpty() || name.contains(" ");
     }
 }
 
 class NumericValueValidator {
-    private NumericValueValidator() {
-    }   //private constructor - can not create instances
+    private NumericValueValidator() {}
 
-    public static boolean isValidValue(double value) {
-        return value >= 0;
+    public static boolean notValidValue(double value) {
+        return !(value >= 0);
     }
 }
 
 class ConstantMessages {
-    private ConstantMessages() {
-    }   //private constructor - can not create instances
+    private ConstantMessages() {}
 
     public static final String INVALID_NAME_EXCEPTION_MESSAGE = "Name cannot be empty";
 
