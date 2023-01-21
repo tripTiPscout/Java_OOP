@@ -1,0 +1,211 @@
+package Advanced;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        Map<String, Person> people;
+        Map<String, Product> products;
+
+        try {
+            people = getPeopleData(scanner);
+            products = getProductsData(scanner);
+
+        } catch (IllegalArgumentException exception) {
+
+            System.out.println(exception.getMessage());
+            return;
+        }
+
+        readPurchasingData(scanner, people, products);
+
+        printPeoplePurchases(people);
+    }
+
+    private static Map<String, Person> getPeopleData(Scanner scanner) {
+        String[] tokens = scanner.nextLine().split(";");
+
+        Map<String, Person> people = new LinkedHashMap<>();
+
+        for (String token : tokens) {
+            String[] productData = token.split("=");
+
+            String name = productData[0];
+            double money = Double.parseDouble(productData[1]);
+
+            Person person = new Person(name, money);
+            people.put(person.getName(), person);
+        }
+        return people;
+    }
+
+    private static Map<String, Product> getProductsData(Scanner scanner) {
+        String[] tokens = scanner.nextLine().split(";");
+
+        Map<String, Product> products = new HashMap<>();
+
+        for (String token : tokens) {
+            String[] productData = token.split("=");
+
+            String name = productData[0];
+            double cost = Double.parseDouble(productData[1]);
+
+            Product product = new Product(name, cost);
+            products.put(product.getName(), product);
+        }
+        return products;
+    }
+
+    private static void readPurchasingData(Scanner scanner, Map<String, Person> people, Map<String, Product> products) {
+        String command = scanner.nextLine();
+
+        while (!command.equals("END")) {
+            String[] purchaseData = command.split(" ");
+
+            String personName = purchaseData[0];
+            String productName = purchaseData[1];
+
+            purchasingProduct(people, products, personName, productName);
+
+            command = scanner.nextLine();
+        }
+    }
+
+    private static void purchasingProduct(Map<String, Person> people, Map<String, Product> products, String personName, String productName) {
+        try {
+            Person person = people.get(personName);
+            Product product = products.get(productName);
+
+            person.buyProduct(product);
+
+        } catch (IllegalArgumentException exception) {
+
+            System.out.println(exception.getMessage());
+        }
+    }
+
+    private static void printPeoplePurchases(Map<String, Person> people) {
+        for (Person person : people.values()) {
+
+            String productsOutput = person.getBag().isEmpty()
+                    ? "Nothing bought"
+                    : person.getBag().stream()
+                    .map(Product::getName)
+                    .collect(Collectors.joining(", "));
+
+            System.out.print(person.getName() + " - " + productsOutput);
+        }
+    }
+}
+
+class Person {
+    private String name;
+    private double money;
+    private List<Product> bag;
+
+    public Person(String name, double money) {
+        this.setName(name);
+        this.setMoney(money);
+        this.bag = new ArrayList<>();
+    }
+
+    private void setName(String name) {
+        if (!NameValidator.isValidName(name)) {   //invoke static method by class name
+            throw new IllegalArgumentException(ConstantMessages.INVALID_NAME_EXCEPTION_MESSAGE);
+        }
+        this.name = name;
+    }
+
+    private void setMoney(double money) {
+        if (!NumericValueValidator.isValidValue(money)) {   //invoke static method by class name
+            throw new IllegalArgumentException(ConstantMessages.INVALID_VALUE_EXCEPTION_MESSAGE);
+        }
+        this.money = money;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<Product> getBag() {
+        return bag;
+    }
+
+    public void buyProduct(Product product) {
+        if (this.money < product.getCost()) {
+            String message = String.format("%s can't afford %s", this.name, product.getName());
+            throw new IllegalArgumentException(message);
+        }
+        this.bag.add(product);
+        this.money -= product.getCost();
+        System.out.printf("%s bought %s%n", this.name, product.getName());
+    }
+}
+
+class Product {
+    private String name;
+    private double cost;
+
+    public Product(String name, double cost) {
+        this.setName(name);
+        this.setCost(cost);
+    }
+
+    private void setName(String name) {
+        if (!NameValidator.isValidName(name)) {   //invoke static method by class name
+            throw new IllegalArgumentException(ConstantMessages.INVALID_NAME_EXCEPTION_MESSAGE);
+        }
+        this.name = name;
+    }
+
+    private void setCost(double cost) {
+        if (!NumericValueValidator.isValidValue(cost)) {   //invoke static method by class name
+            throw new IllegalArgumentException(ConstantMessages.INVALID_VALUE_EXCEPTION_MESSAGE);
+        }
+        this.cost = cost;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getCost() {
+        return cost;
+    }
+}
+
+class NameValidator {
+    private NameValidator() {
+    }   //private constructor - can not create instances
+
+    public static boolean isValidName(String name) {
+        return name != null && !name.trim().isEmpty() && !name.contains(" ");
+    }
+}
+
+class NumericValueValidator {
+    private NumericValueValidator() {
+    }   //private constructor - can not create instances
+
+    public static boolean isValidValue(double value) {
+        return value >= 0;
+    }
+}
+
+class ConstantMessages {
+    private ConstantMessages() {
+    }   //private constructor - can not create instances
+
+    public static final String INVALID_NAME_EXCEPTION_MESSAGE = "Name cannot be empty";
+
+    public static final String INVALID_VALUE_EXCEPTION_MESSAGE = "Money cannot be negative";
+}
