@@ -61,7 +61,7 @@ public class Main {
             } catch (IllegalArgumentException exception) {
                 System.out.println(exception.getMessage());
             }
-            
+
             inputLine = scanner.nextLine();
         }
     }
@@ -78,7 +78,7 @@ class Team {
     }
 
     private void setName(String name) {
-        if (!NameValidator.isNameCorrect(name)) {
+        if (NameValidator.incorrectName(name)) {
             throw new IllegalArgumentException(NameValidator.MESSAGE_EXCEPTION_NAME_VALIDATOR);
         }
         this.name = name;
@@ -129,7 +129,7 @@ class Player {
     }
 
     private void setName(String name) {
-        if (!NameValidator.isNameCorrect(name)) {
+        if (NameValidator.incorrectName(name)) {
             throw new IllegalArgumentException(NameValidator.MESSAGE_EXCEPTION_NAME_VALIDATOR);
         }
         this.name = name;
@@ -197,7 +197,7 @@ class SkillValueValidator {
 class NameValidator {
     public static String MESSAGE_EXCEPTION_NAME_VALIDATOR = "A name should not be empty.";
 
-    public static boolean isNameCorrect(String name) {
-        return name != null && !name.trim().isEmpty() && !name.contains(" ");
+    public static boolean incorrectName(String name) {
+        return name == null || name.trim().isEmpty() || name.contains(" ");
     }
 }
