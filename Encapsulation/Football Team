@@ -1,0 +1,203 @@
+package Advanced;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        operateWithTeams(scanner);
+    }
+
+    private static void operateWithTeams(Scanner scanner) {
+        Map<String, Team> teams = new LinkedHashMap<>();
+
+        String inputLine = scanner.nextLine();
+
+        while (!inputLine.equals("END")) {
+            String[] commandData = inputLine.split(";");
+
+            String command = commandData[0];
+            String teamName = commandData[1];
+
+            try {
+                switch (command) {
+                    case "Team":
+                        Team team = new Team(teamName);
+                        teams.putIfAbsent(teamName, team);
+                        break;
+                    case "Add":
+                        String playerName = commandData[2];
+                        int endurance = Integer.parseInt(commandData[3]);
+                        int sprint = Integer.parseInt(commandData[4]);
+                        int dribble = Integer.parseInt(commandData[5]);
+                        int passing = Integer.parseInt(commandData[6]);
+                        int shooter = Integer.parseInt(commandData[7]);
+
+                        if (!teams.containsKey(teamName)) {
+                            System.out.printf("Team %s does not exist.%n", teamName);
+                        } else {
+                            Player player = new Player(playerName, endurance, sprint, dribble, passing, shooter);
+                            teams.get(teamName).addPlayer(player);
+                        }
+                        break;
+                    case "Remove":
+                        String playerToRemove = commandData[2];
+                        teams.get(teamName).removePlayer(playerToRemove);
+                        break;
+                    case "Rating":
+                        if (!teams.containsKey(teamName)) {
+                            System.out.printf("Team %s does not exist.%n", teamName);
+                        } else {
+                            System.out.printf("%s - %d%n", teamName, Math.round(teams.get(teamName).getRating()));
+                        }
+                        break;
+                }
+            } catch (IllegalArgumentException exception) {
+                System.out.println(exception.getMessage());
+            }
+            
+            inputLine = scanner.nextLine();
+        }
+    }
+
+}
+
+class Team {
+    private String name;
+    private List<Player> players;
+
+    public Team(String name) {
+        setName(name);
+        players = new ArrayList<>();
+    }
+
+    private void setName(String name) {
+        if (!NameValidator.isNameCorrect(name)) {
+            throw new IllegalArgumentException(NameValidator.MESSAGE_EXCEPTION_NAME_VALIDATOR);
+        }
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void addPlayer(Player player) {
+        players.add(player);
+    }
+
+    public void removePlayer(String playerName) {
+        boolean removed = players.removeIf(player -> player.getName().equals(playerName));
+
+        if (!removed) {
+            String message = String.format("Player %s is not in %s team.", playerName, name);
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    public double getRating() {
+        return players.stream().mapToDouble(Player::overallSkillLevel).sum() / players.size();
+        //return players.stream().mapToDouble(Player::overallSkillLevel).average().orElse(0.0);
+    }
+}
+
+class Player {
+    private String name;
+    private int endurance;
+    private int sprint;
+    private int dribble;
+    private int passing;
+    private int shooting;
+
+    public Player(String name, int endurance, int sprint, int dribble, int passing, int shooting) {
+        setName(name);
+        setEndurance(endurance);
+        setSprint(sprint);
+        setDribble(dribble);
+        setPassing(passing);
+        setShooting(shooting);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    private void setName(String name) {
+        if (!NameValidator.isNameCorrect(name)) {
+            throw new IllegalArgumentException(NameValidator.MESSAGE_EXCEPTION_NAME_VALIDATOR);
+        }
+        this.name = name;
+    }
+
+    private void setEndurance(int endurance) {
+        checkValueIsInRange(endurance, "Endurance");
+//        if (!SkillValueValidator.valueValidator(endurance)) {
+//            throw new IllegalArgumentException("Endurance" + SkillValueValidator.MESSAGE_EXCEPTION_SKILL_VALIDATOR);
+//        }
+        this.endurance = endurance;
+    }
+
+    private void setSprint(int sprint) {
+        checkValueIsInRange(sprint, "Sprint");
+//        if (!SkillValueValidator.valueValidator(sprint)) {
+//            throw new IllegalArgumentException("Sprint" + SkillValueValidator.MESSAGE_EXCEPTION_SKILL_VALIDATOR);
+//        }
+        this.sprint = sprint;
+    }
+
+    private void setDribble(int dribble) {
+        checkValueIsInRange(dribble, "Dribble");
+//        if (!SkillValueValidator.valueValidator(dribble)) {
+//            throw new IllegalArgumentException("Dribble" + SkillValueValidator.MESSAGE_EXCEPTION_SKILL_VALIDATOR);
+//        }
+        this.dribble = dribble;
+    }
+
+    private void setPassing(int passing) {
+        checkValueIsInRange(passing, "Passing");
+//        if (!SkillValueValidator.valueValidator(passing)) {
+//            throw new IllegalArgumentException("Passing" + SkillValueValidator.MESSAGE_EXCEPTION_SKILL_VALIDATOR);
+//        }
+        this.passing = passing;
+    }
+
+    private void setShooting(int shooting) {
+        checkValueIsInRange(shooting, "Shooting");
+//        if (!SkillValueValidator.valueValidator(shooting)) {
+//            throw new IllegalArgumentException("Shooting" + SkillValueValidator.MESSAGE_EXCEPTION_SKILL_VALIDATOR);
+//        }
+        this.shooting = shooting;
+    }
+
+    public double overallSkillLevel() {
+        return (endurance + sprint + dribble + passing + shooting) / 5.0;
+    }
+
+    private void checkValueIsInRange(int statValue, String statName) {
+        if (statValue < 0 || statValue > 100) {
+            throw new IllegalArgumentException(statName + " should be between 0 and 100.");
+        }
+    }
+}
+
+class SkillValueValidator {
+    public static String MESSAGE_EXCEPTION_SKILL_VALIDATOR = " should be between 0 and 100.";
+
+    public static boolean valueValidator(int value) {
+        return value >= 0 && value <= 100;
+    }
+}
+
+class NameValidator {
+    public static String MESSAGE_EXCEPTION_NAME_VALIDATOR = "A name should not be empty.";
+
+    public static boolean isNameCorrect(String name) {
+        return name != null && !name.trim().isEmpty() && !name.contains(" ");
+    }
+}
