@@ -70,7 +70,7 @@ public class Main {
 
 class Team {
     private String name;
-    private List<Player> players;
+    private final List<Player> players;
 
     public Team(String name) {
         setName(name);
