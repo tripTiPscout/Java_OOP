@@ -1,0 +1,38 @@
+package Advanced;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        ImmutablePerson person = new ImmutablePerson("Peter", 38);
+
+        System.out.println(person);      //Peter is 38 years old.
+
+        ImmutablePerson newPerson = person.changeAge(50);     // create new object to change age
+
+        person.changeAge(5);   // doesn't effect
+
+        System.out.println(person);     //Peter is 38 years old.
+
+        System.out.println(newPerson);      //Peter is 50 years old.
+    }
+}
+
+class ImmutablePerson {
+    private String name;
+    private int age;
+
+    public ImmutablePerson(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public ImmutablePerson changeAge(int age) {      // create method to change age
+        return new ImmutablePerson(this.name, age);    // create new object
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s is %d years old.", name, age);
+    }
+}
