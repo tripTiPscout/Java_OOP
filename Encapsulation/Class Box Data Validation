@@ -1,0 +1,82 @@
+package Advanced;
+
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        double length = Double.parseDouble(scanner.nextLine());
+        double width = Double.parseDouble(scanner.nextLine());
+        double height = Double.parseDouble(scanner.nextLine());
+
+        try {
+            Box box = new Box(length, width, height);
+
+            double surfaceArea = box.calculateSurfaceArea();
+            double lateralSurfaceArea = box.calculateLateralSurfaceArea();
+            double volume = box.calculateVolume();
+
+            printResult(surfaceArea, lateralSurfaceArea, volume);
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
+        }
+    }
+
+    private static void printResult(double surfaceArea, double lateralSurfaceArea, double volume) {
+        System.out.printf("""
+                Surface Area - %.2f
+                Lateral Surface Area - %.2f
+                Volume - %.2f
+                """, surfaceArea, lateralSurfaceArea, volume);
+    }
+
+}
+
+class Box {
+    private double length;
+    private double width;
+    private double height;
+
+    public Box(double length, double width, double height) {
+        this.setLength(length);
+        this.setWidth(width);
+        this.setHeight(height);
+    }
+
+    private void setLength(double length) {
+        checkValue(length, "Length");
+        this.length = length;
+    }
+
+    private void setWidth(double width) {
+        checkValue(width, "Width");
+        this.width = width;
+    }
+
+    private void setHeight(double height) {
+        checkValue(height, "Height");
+        this.height = height;
+    }
+
+    private void checkValue(double length, String messagePrefix) {
+        if (length <= 0) {
+            throw new IllegalArgumentException(messagePrefix + " cannot be zero or negative.");
+        }
+    }
+
+    public double calculateSurfaceArea() {
+        return (2 * this.length * this.width)
+                + calculateLateralSurfaceArea();
+    }
+
+    public double calculateLateralSurfaceArea() {
+        return (2 * this.length * this.height)
+                + (2 * this.width * this.height);
+    }
+
+    public double calculateVolume() {
+        return length * width * height;
+    }
+}
