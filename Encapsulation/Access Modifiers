@@ -1,0 +1,76 @@
+package Advanced;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class Main {
+    public static void main(String[] args) {
+
+        Animal animal = new Animal(34, 132, "Pip");
+
+        Animal dog = new Dog(12, 25, "Mik");
+
+        Dog doggy = new Dog();
+
+        List<Animal> animals = new ArrayList<>();
+
+        animals.add(animal);
+        animals.add(dog);
+        animals.add(doggy);
+
+        Shelter shelter = new Shelter(animals);
+
+        dog.setHeight(13);
+
+        dog.height = 14;
+
+        System.out.println(shelter.getAnimals());
+    }
+}
+
+class Animal {
+    private double weight;
+    protected double height;
+    String name;
+
+    public Animal() {
+    }
+
+    public Animal(double weight, double height, String name) {
+        this.weight = weight;
+        this.height = height;
+        this.name = name;
+    }
+
+    public void setHeight(double height) {
+        this.height = height;
+    }
+}
+
+class Dog extends Animal {
+    public Dog() {
+    }
+
+    public Dog(double weight, double height, String name) {
+        super(weight, height, name);
+    }
+
+    public void setHeight(double height) {
+        this.height = height;
+    }
+}
+
+class Shelter {
+    List<Animal> animals;
+
+    public Shelter(List<Animal> animals) {
+        this.animals = animals;
+    }
+
+    public String getAnimals() {
+        return this.animals.stream()
+                .map(a -> a.name)
+                .collect(Collectors.joining("|"));
+    }
+}
