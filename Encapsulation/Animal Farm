@@ -1,0 +1,64 @@
+package Advanced;
+
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String name = scanner.nextLine();
+        int age = Integer.parseInt(scanner.nextLine());
+
+        try {
+            Chicken chicken = new Chicken(name, age);
+            double eggs = chicken.productPerDay();
+            System.out.println(chicken + " can produce " + eggs + " eggs per day.");
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
+        }
+    }
+}
+
+class Chicken {
+    private String name;
+    private int age;
+
+    public Chicken(String name, int age) {
+        this.setName(name);
+        this.setAge(age);
+    }
+
+    private void setName(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalStateException("Name cannot be empty.");
+        }
+        this.name = name;
+    }
+
+    private void setAge(int age) {
+        if (age < 0 || age > 15) {
+            throw new IllegalArgumentException("Age should be between 0 and 15.");
+        }
+        this.age = age;
+    }
+
+    public double productPerDay() {
+        return calculateProductPerDay();
+    }
+
+    private double calculateProductPerDay() {
+        if (age <= 5) {
+            return 2;
+        } else if (age <= 11) {
+            return 1;
+        } else {
+            return 0.75;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Chicken %s (age %d)", this.name, this.age);
+    }
+}
