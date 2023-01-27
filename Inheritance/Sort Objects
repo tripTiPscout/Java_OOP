@@ -71,10 +71,10 @@ class Person {
     private double salary;
 
     public Person(String firstName, String lastName, int age, double salary) {
-        this.setFirstName(firstName); //this.firstName = firstName;
-        this.setLastName(lastName);   //this.lastName = lastName;
-        this.setAge(age);             //this.age = age;
-        this.setSalary(salary);       //this.salary = salary;
+        this.setFirstName(firstName);
+        this.setLastName(lastName);
+        this.setAge(age);
+        this.setSalary(salary);
     }
 
     // constructor chaining
@@ -142,7 +142,7 @@ class Person {
 }
 
 class Student extends Person {
-    //наследява конструктора без заложена заплата (= 0.0)
+
     public Student(String firstName, String lastName, int age) {
         super(firstName, lastName, age);
     }
@@ -154,12 +154,6 @@ class Student extends Person {
 
     @Override
     public String toString() {
-
-        // важно е кога използваме super, this или нито едното
-        // super извиква метода в базовия клас, this извиква метода от този (текущия) клас, без ключова дума извиква локалния метод (в същите къдрави скоби)
-
         return String.format("Student %s %s is %d years (by 2) old.", super.getFirstName(), this.getLastName(), getAge());
-
-        //return super.toString();
     }
 }
