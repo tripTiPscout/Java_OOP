@@ -103,7 +103,6 @@ class Team {
 
     public double getRating() {
         return players.stream().mapToDouble(Player::overallSkillLevel).sum() / players.size();
-        //return players.stream().mapToDouble(Player::overallSkillLevel).average().orElse(0.0);
     }
 }
 
@@ -137,41 +136,26 @@ class Player {
 
     private void setEndurance(int endurance) {
         checkValueIsInRange(endurance, "Endurance");
-//        if (!SkillValueValidator.valueValidator(endurance)) {
-//            throw new IllegalArgumentException("Endurance" + SkillValueValidator.MESSAGE_EXCEPTION_SKILL_VALIDATOR);
-//        }
         this.endurance = endurance;
     }
 
     private void setSprint(int sprint) {
         checkValueIsInRange(sprint, "Sprint");
-//        if (!SkillValueValidator.valueValidator(sprint)) {
-//            throw new IllegalArgumentException("Sprint" + SkillValueValidator.MESSAGE_EXCEPTION_SKILL_VALIDATOR);
-//        }
         this.sprint = sprint;
     }
 
     private void setDribble(int dribble) {
         checkValueIsInRange(dribble, "Dribble");
-//        if (!SkillValueValidator.valueValidator(dribble)) {
-//            throw new IllegalArgumentException("Dribble" + SkillValueValidator.MESSAGE_EXCEPTION_SKILL_VALIDATOR);
-//        }
         this.dribble = dribble;
     }
 
     private void setPassing(int passing) {
         checkValueIsInRange(passing, "Passing");
-//        if (!SkillValueValidator.valueValidator(passing)) {
-//            throw new IllegalArgumentException("Passing" + SkillValueValidator.MESSAGE_EXCEPTION_SKILL_VALIDATOR);
-//        }
         this.passing = passing;
     }
 
     private void setShooting(int shooting) {
         checkValueIsInRange(shooting, "Shooting");
-//        if (!SkillValueValidator.valueValidator(shooting)) {
-//            throw new IllegalArgumentException("Shooting" + SkillValueValidator.MESSAGE_EXCEPTION_SKILL_VALIDATOR);
-//        }
         this.shooting = shooting;
     }
 
