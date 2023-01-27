@@ -1,0 +1,165 @@
+package Advanced;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Main {
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        int inputLines = Integer.parseInt(reader.readLine());
+
+        List<Person> people = new ArrayList<>();
+        List<Student> students = new ArrayList<>();
+
+        for (int i = 1; i <= inputLines; i++) {
+            String[] inputPersonData = reader.readLine().split("\\s+");
+
+            String firstName = inputPersonData[0];
+            String lastName = inputPersonData[1];
+            int age = Integer.parseInt(inputPersonData[2]);
+            double salary = Double.parseDouble(inputPersonData[3]);
+
+            // with try/catch program will continue
+            try {
+                Person person = new Person(firstName, lastName, age, salary);
+                people.add(person);
+            } catch (Exception exception) {
+                System.out.println(exception.getMessage());
+            }
+
+            // without try/catch program will throw exception and break
+            if (age < 30) {
+                Student student = new Student(firstName, lastName, age);
+                students.add(student);
+            }
+        }
+
+        people.sort((firstPerson, secondPerson) -> {
+            int resultComparator = firstPerson.getFirstName().compareTo(secondPerson.getFirstName());
+
+            if (resultComparator != 0) {
+                return resultComparator;
+            } else {
+                return Integer.compare(firstPerson.getAge(), secondPerson.getAge());
+            }
+        });
+
+        double percentage = Double.parseDouble(reader.readLine());
+
+        for (Person person : people) {
+            person.increaseSalary(percentage);
+            System.out.println(person);
+        }
+
+        System.out.println("Students are:");
+
+        for (Student student : students) {
+            System.out.println(student);
+        }
+    }
+
+}
+
+class Person {
+    private String firstName;
+    private String lastName;
+    private int age;
+    private double salary;
+
+    public Person(String firstName, String lastName, int age, double salary) {
+        this.setFirstName(firstName); //this.firstName = firstName;
+        this.setLastName(lastName);   //this.lastName = lastName;
+        this.setAge(age);             //this.age = age;
+        this.setSalary(salary);       //this.salary = salary;
+    }
+
+    // constructor chaining
+    public Person(String firstName, String lastName, int age) {
+        this(firstName, lastName, age, 0.0);
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    private double getSalary() {
+        return salary;
+    }
+
+    private void setFirstName(String firstName) {
+        validateName(firstName, "First name");
+        this.firstName = firstName;
+    }
+
+    private void setLastName(String lastName) {
+        validateName(lastName, "Last name");
+        this.lastName = lastName;
+    }
+
+    private void setAge(int age) {
+        if (age <= 0) {
+            throw new IllegalArgumentException("Ages can not be negative " + age);
+        }
+        this.age = age;
+    }
+
+    private void setSalary(double salary) {
+        if (salary < 460) {
+            throw new IllegalArgumentException("Minimal salary is 460, and can not be " + salary);
+        }
+        this.salary = salary;
+    }
+
+    public void increaseSalary(double percentage) {
+        if (this.age < 30) {
+            percentage /= 2;
+        }
+        this.setSalary(this.getSalary() + this.getSalary() * percentage / 100);
+    }
+
+    private void validateName(String name, String prefix) {
+        if (name.length() < 2) {
+            throw new IllegalArgumentException(prefix + " cannot be less than two letters: " + name);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s %s is %d years old gets %s lv.", firstName, lastName, age, salary);
+    }
+}
+
+class Student extends Person {
+    //наследява конструктора без заложена заплата (= 0.0)
+    public Student(String firstName, String lastName, int age) {
+        super(firstName, lastName, age);
+    }
+
+    @Override
+    public int getAge() {
+        return super.getAge() * 2; //за пример умножаваме годините
+    }
+
+    @Override
+    public String toString() {
+
+        // важно е кога използваме super, this или нито едното
+        // super извиква метода в базовия клас, this извиква метода от този (текущия) клас, без ключова дума извиква локалния метод (в същите къдрави скоби)
+
+        return String.format("Student %s %s is %d years (by 2) old.", super.getFirstName(), this.getLastName(), getAge());
+
+        //return super.toString();
+    }
+}
