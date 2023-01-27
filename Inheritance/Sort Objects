@@ -149,7 +149,7 @@ class Student extends Person {
 
     @Override
     public int getAge() {
-        return super.getAge() * 2; //за пример умножаваме годините
+        return super.getAge() * 2; //mutate years for example
     }
 
     @Override
