@@ -23,7 +23,6 @@ public class Main {
             int age = Integer.parseInt(inputPersonData[2]);
             double salary = Double.parseDouble(inputPersonData[3]);
 
-            // with try/catch program will continue
             try {
                 Person person = new Person(firstName, lastName, age, salary);
                 people.add(person);
@@ -31,7 +30,6 @@ public class Main {
                 System.out.println(exception.getMessage());
             }
 
-            // without try/catch program will throw exception and break
             if (age < 30) {
                 Student student = new Student(firstName, lastName, age);
                 students.add(student);
@@ -77,7 +75,6 @@ class Person {
         this.setSalary(salary);
     }
 
-    // constructor chaining
     public Person(String firstName, String lastName, int age) {
         this(firstName, lastName, age, 0.0);
     }
