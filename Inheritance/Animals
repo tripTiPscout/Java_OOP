@@ -111,12 +111,12 @@ class Cat extends Animal {
     private String food;
 
     public Cat(String name, int age, double weight, String food) {
-        super(name, age, weight);   // задължително първо се извиква базовия конструктор
+        super(name, age, weight);
         this.food = food;
     }
 
     public Cat() {
-        super();   // не е задължително да се ползва в празен конструктор
+        super();
     }
 
     @Override
@@ -133,7 +133,6 @@ class Cat extends Animal {
         return "Cat {" +
                 "name = " + super.name +
                 ", age = " + super.getAge() +
-                //", weight='" + super.weight + '\'' +  =>  weight is private!!! (can use getWeight() method)
                 ", food = " + food +
                 '}';
     }
