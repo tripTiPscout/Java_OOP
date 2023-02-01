@@ -15,8 +15,8 @@ public class Main {
         animal2.eat();
         animal3.eat();
 
-        System.out.println(animal1.getAge());   // 5 => използва метода на инстанцията new Dog()
-        System.out.println(animal2.getAge());   // 14 => използва метода на инстанцията new Cat()
+        System.out.println(animal1.getAge());
+        System.out.println(animal2.getAge());
 
         Dog dog = new Puppy("doggy", 5, 8.2, "puppyFood");
         dog.eat();
