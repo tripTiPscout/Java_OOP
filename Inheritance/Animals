@@ -31,10 +31,10 @@ public class Main {
         Cat cat = new Cat("catty", 1, 1.1, "catFood");
         cat.eat();
         cat.meow();
-        System.out.println(cat.getAge());   // age = 7
-        System.out.println(cat);   // age = 1  => toString() use super.getAge
+        System.out.println(cat.getAge());
+        System.out.println(cat);
 
-        List<Animal> animals = new ArrayList<>();   // can store all type of animals
+        List<Animal> animals = new ArrayList<>();
 
         animals.add(new Animal());
         animals.add(new Dog());
