@@ -1,0 +1,144 @@
+package Advanced;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        Animal animal1 = new Dog("doggy", 5, 8.2, "dogFood");
+        Animal animal2 = new Cat("catty", 2, 1.4, "catFood");
+        Animal animal3 = new Puppy("puppy", 3, 3.6, "puppyFood");
+
+        animal1.eat();
+        animal2.eat();
+        animal3.eat();
+
+        System.out.println(animal1.getAge());   // 5 => използва метода на инстанцията new Dog()
+        System.out.println(animal2.getAge());   // 14 => използва метода на инстанцията new Cat()
+
+        Dog dog = new Puppy("doggy", 5, 8.2, "puppyFood");
+        dog.eat();
+        dog.bark();
+        System.out.println(dog.getAge());
+
+        Puppy puppy = new Puppy("doggy", 5, 8.2, "puppyFood");
+        puppy.eat();   // if was in another package will not be visible because method is protected
+        puppy.bark();
+        puppy.weep();
+
+        Cat cat = new Cat("catty", 1, 1.1, "catFood");
+        cat.eat();
+        cat.meow();
+        System.out.println(cat.getAge());   // age = 7
+        System.out.println(cat);   // age = 1  => toString() use super.getAge
+
+        List<Animal> animals = new ArrayList<>();   // can store all type of animals
+
+        animals.add(new Animal());
+        animals.add(new Dog());
+        animals.add(new Puppy("puppy", 3, 3.6, "puppyFood"));
+        animals.add(new Cat());
+
+        for (Animal animal : animals) {
+            animal.eat();
+        }
+
+        Human human = new Human();
+
+        System.out.println(dog.id);
+        System.out.println(puppy.id);
+        System.out.println(cat.id);
+    }
+
+}
+
+class Animal {
+    public String name;
+    protected int age;
+    private double weight;   // private fields can not be inherited
+    int id;   // without access modifier field is package private
+
+    public Animal(String name, int age, double weight) {
+        this.name = name;
+        this.age = age;
+        this.weight = weight;
+    }
+
+    public Animal() {
+
+    }
+
+    public int getAge() {   // if is final method can not be @override
+        return this.age;
+    }
+
+    protected void eat() {
+        System.out.println("eating...");
+    }
+}
+
+class Dog extends Animal {
+    private String food;
+
+    public Dog(String name, int age, double weight, String food) {
+        super(name, age, weight);   // задължително първо се извиква базовия конструктор
+        this.food = food;
+    }
+
+    public Dog() {
+        super();   // не е задължително да се ползва в празен конструктор
+    }
+
+    public void bark() {
+        super.eat();
+        System.out.println("barking...");
+    }
+}
+
+class Puppy extends Dog {
+    public Puppy(String name, int age, double weight, String food) {
+        super(name, age, weight, food);
+    }
+
+    public void weep() {
+        System.out.println("weeping...");
+    }
+}
+
+class Cat extends Animal {
+    private String food;
+
+    public Cat(String name, int age, double weight, String food) {
+        super(name, age, weight);   // задължително първо се извиква базовия конструктор
+        this.food = food;
+    }
+
+    public Cat() {
+        super();   // не е задължително да се ползва в празен конструктор
+    }
+
+    @Override
+    public int getAge() {
+        return super.getAge() * 7;
+    }
+
+    public void meow() {
+        System.out.println("meowing...");
+    }
+
+    @Override
+    public String toString() {
+        return "Cat {" +
+                "name = " + super.name +
+                ", age = " + super.getAge() +
+                //", weight='" + super.weight + '\'' +  =>  weight is private!!! (can use getWeight() method)
+                ", food = " + food +
+                '}';
+    }
+}
+
+class Human {
+
+}
