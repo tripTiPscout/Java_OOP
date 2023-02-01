@@ -24,7 +24,7 @@ public class Main {
         System.out.println(dog.getAge());
 
         Puppy puppy = new Puppy("doggy", 5, 8.2, "puppyFood");
-        puppy.eat();   // if was in another package will not be visible because method is protected
+        puppy.eat();
         puppy.bark();
         puppy.weep();
 
