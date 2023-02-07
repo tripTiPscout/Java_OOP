@@ -1,0 +1,79 @@
+package Advanced;
+
+import java.util.List;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        // polymorphism => many forms of Animal
+        List<Animal> animals = List.of(new Wolf(), new Goat(), new Snake());
+
+        for (Animal animal : animals) {
+            animal.eat();
+        }
+        // polymorphism => many forms of Mammal
+        List<Mammal> mammals = List.of(new Wolf(), new Goat());
+        // snake is NOT Mammal
+        for (Mammal mammal : mammals) {
+            mammal.drinkMilk();
+        }
+
+    }
+
+}
+
+interface Animal {
+    void eat();   // no implementation
+}
+
+abstract class Mammal implements Animal {
+    public void drinkMilk() {
+        System.out.println("drink milk");
+    }
+
+    @Override                     // override from Animal
+    public abstract void eat();   // abstract methods have not implementation
+    // is NOT necessary to override - it comes from the interface Animal
+}
+
+class Wolf extends Mammal {
+
+    @Override                    // is NOT necessary to override drinkMilk()
+    public void drinkMilk() {   // it comes from parent class Mammal
+        System.out.print("Wolf ");  //is override to current Mammal - Wolf
+        super.drinkMilk();
+    }
+
+    @Override   // is IT necessary to implement method eat()
+    public void eat() {  // because it comes from the interface Animal
+        System.out.println("Wolf eats goat");
+    }
+}
+
+class Snake implements Animal {
+    @Override   // is IT necessary to implement method eat()
+    public void eat() {  // because it comes from the interface Animal
+        System.out.println("Snake eats mouse");
+    }
+}
+
+class Goat extends Mammal {
+    @Override                    // is NOT necessary to override drinkMilk()
+    public void drinkMilk() {   // it comes from parent class Mammal
+        System.out.print("Goat ");  //is override to current Mammal - Goat
+        super.drinkMilk();
+    }
+
+    @Override   // is IT necessary to implement method eat()
+    public void eat() {  // because it comes from the interface Animal
+        System.out.println("Goat eats grass");
+    }
+}
+
+//        Wolf eats goat
+//        Goat eats grass
+//        Snake eats mouse
+//        
+//        Wolf drink milk
+//        Goat drink milk
