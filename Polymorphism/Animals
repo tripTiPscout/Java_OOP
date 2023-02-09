@@ -1,4 +1,4 @@
-package Advanced;
+package OOP;
 
 import java.util.List;
 
@@ -12,8 +12,10 @@ public class Main {
         for (Animal animal : animals) {
             animal.eat();
         }
+        
         // polymorphism => many forms of Mammal
         List<Mammal> mammals = List.of(new Wolf(), new Goat());
+        
         // snake is NOT Mammal
         for (Mammal mammal : mammals) {
             mammal.drinkMilk();
@@ -32,9 +34,9 @@ abstract class Mammal implements Animal {
         System.out.println("drink milk");
     }
 
-    @Override                     // override from Animal
+    @Override                      // override from Animal
     public abstract void eat();   // abstract methods have not implementation
-    // is NOT necessary to override - it comes from the interface Animal
+                                 // is NOT necessary to override - it comes from the interface Animal
 }
 
 class Wolf extends Mammal {
@@ -45,28 +47,29 @@ class Wolf extends Mammal {
         super.drinkMilk();
     }
 
-    @Override   // is IT necessary to implement method eat()
-    public void eat() {  // because it comes from the interface Animal
+    @Override               // is IT necessary to implement method eat()
+    public void eat() {    // because it comes from the interface Animal
         System.out.println("Wolf eats goat");
     }
 }
 
 class Snake implements Animal {
-    @Override   // is IT necessary to implement method eat()
-    public void eat() {  // because it comes from the interface Animal
+    @Override              // is IT necessary to implement method eat()
+    public void eat() {   // because it comes from the interface Animal
         System.out.println("Snake eats mouse");
     }
 }
 
 class Goat extends Mammal {
-    @Override                    // is NOT necessary to override drinkMilk()
-    public void drinkMilk() {   // it comes from parent class Mammal
+
+    @Override                         // is NOT necessary to override drinkMilk()
+    public void drinkMilk() {        // it comes from parent class Mammal
         System.out.print("Goat ");  //is override to current Mammal - Goat
         super.drinkMilk();
     }
 
-    @Override   // is IT necessary to implement method eat()
-    public void eat() {  // because it comes from the interface Animal
+    @Override              // is IT necessary to implement method eat()
+    public void eat() {   // because it comes from the interface Animal
         System.out.println("Goat eats grass");
     }
 }
