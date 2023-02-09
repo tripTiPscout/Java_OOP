@@ -41,8 +41,8 @@ abstract class Mammal implements Animal {
 
 class Wolf extends Mammal {
 
-    @Override                    // is NOT necessary to override drinkMilk()
-    public void drinkMilk() {   // it comes from parent class Mammal
+    @Override                         // is NOT necessary to override drinkMilk()
+    public void drinkMilk() {        // it comes from parent class Mammal
         System.out.print("Wolf ");  //is override to current Mammal - Wolf
         super.drinkMilk();
     }
@@ -54,8 +54,8 @@ class Wolf extends Mammal {
 }
 
 class Snake implements Animal {
-    @Override              // is IT necessary to implement method eat()
-    public void eat() {   // because it comes from the interface Animal
+    @Override                     // is IT necessary to implement method eat()
+    public void eat() {          // because it comes from the interface Animal
         System.out.println("Snake eats mouse");
     }
 }
