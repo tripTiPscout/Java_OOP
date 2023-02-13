@@ -73,10 +73,3 @@ class Goat extends Mammal {
         System.out.println("Goat eats grass");
     }
 }
-
-//        Wolf eats goat
-//        Goat eats grass
-//        Snake eats mouse
-//        
-//        Wolf drink milk
-//        Goat drink milk
