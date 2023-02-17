@@ -23,7 +23,7 @@ public class Main {
 }
 
 interface Animal {
-    void eat();   // no implementation
+    void eat();
 }
 
 abstract class Mammal implements Animal {
