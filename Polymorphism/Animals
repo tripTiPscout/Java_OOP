@@ -58,9 +58,9 @@ class Snake implements Animal {
 
 class Goat extends Mammal {
 
-    @Override                         // is NOT necessary to override drinkMilk()
-    public void drinkMilk() {        // it comes from parent class Mammal
-        System.out.print("Goat ");  //is override to current Mammal - Goat
+    @Override
+    public void drinkMilk() {
+        System.out.print("Goat ");
         super.drinkMilk();
     }
 
