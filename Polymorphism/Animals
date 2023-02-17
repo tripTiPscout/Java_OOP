@@ -50,8 +50,8 @@ class Wolf extends Mammal {
 }
 
 class Snake implements Animal {
-    @Override                     // is IT necessary to implement method eat()
-    public void eat() {          // because it comes from the interface Animal
+    @Override
+    public void eat() {
         System.out.println("Snake eats mouse");
     }
 }
