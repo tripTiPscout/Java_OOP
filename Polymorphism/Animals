@@ -37,9 +37,9 @@ abstract class Mammal implements Animal {
 
 class Wolf extends Mammal {
 
-    @Override                         // is NOT necessary to override drinkMilk()
-    public void drinkMilk() {        // it comes from parent class Mammal
-        System.out.print("Wolf ");  //is override to current Mammal - Wolf
+    @Override
+    public void drinkMilk() {
+        System.out.print("Wolf ");
         super.drinkMilk();
     }
 
