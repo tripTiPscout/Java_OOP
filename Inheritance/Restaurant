@@ -1,0 +1,149 @@
+package Advanced;
+
+import java.math.BigDecimal;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+
+    }
+
+}
+
+class Product {
+
+    private final String name;
+    private final BigDecimal price;
+
+    public Product(String name, BigDecimal price) {
+        this.name = name;
+        this.price = price;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+}
+
+class Food extends Product {
+
+    private final double grams;
+
+    public Food(String name, BigDecimal price, double grams) {
+        super(name, price);
+        this.grams = grams;
+    }
+
+    public double getGrams() {
+        return grams;
+    }
+}
+
+class Starter extends Food {
+    public Starter(String name, BigDecimal price, double grams) {
+        super(name, price, grams);
+    }
+}
+
+class Soup extends Starter {
+    public Soup(String name, BigDecimal price, double grams) {
+        super(name, price, grams);
+    }
+}
+
+class MainDish extends Food {
+
+    public MainDish(String name, BigDecimal price, double grams) {
+        super(name, price, grams);
+    }
+}
+
+class Salmon extends MainDish {
+
+    private static final double SALMON_GRAMS = 22;
+
+    public Salmon(String name, BigDecimal price) {
+        super(name, price, SALMON_GRAMS);
+    }
+}
+
+class Dessert extends Food {
+
+    private final double calories;
+
+    public Dessert(String name, BigDecimal price, double grams, double calories) {
+        super(name, price, grams);
+        this.calories = calories;
+    }
+
+    public double getCalories() {
+        return calories;
+    }
+}
+
+class Cake extends Dessert {
+
+    private final static double CAKE_GRAMS = 250;
+    private final static double CAKE_CALORIES = 1000;
+    private final static BigDecimal CAKE_PRICE = BigDecimal.valueOf(5);
+
+    public Cake(String name) {
+        super(name, CAKE_PRICE, CAKE_GRAMS, CAKE_CALORIES);
+    }
+}
+
+class Beverage extends Product {
+
+    private final double milliliters;
+
+    public Beverage(String name, BigDecimal price, double milliliters) {
+        super(name, price);
+        this.milliliters = milliliters;
+    }
+
+    public double getMilliliters() {
+        return milliliters;
+    }
+}
+
+class ColdBeverage extends Beverage {
+
+    public ColdBeverage(String name, BigDecimal price, double milliliters) {
+        super(name, price, milliliters);
+    }
+}
+
+class HotBeverage extends Beverage {
+
+    public HotBeverage(String name, BigDecimal price, double milliliters) {
+        super(name, price, milliliters);
+    }
+}
+
+class Coffee extends HotBeverage {
+
+    private static final double COFFEE_MILLILITERS = 50;
+    private static final BigDecimal COFFEE_PRICE = BigDecimal.valueOf(3.5);
+    private final double caffeine;
+
+    public Coffee(String name, double caffeine) {
+        super(name, COFFEE_PRICE, COFFEE_MILLILITERS);
+        this.caffeine = caffeine;
+    }
+
+    public double getCaffeine() {
+        return caffeine;
+    }
+}
+
+class Tea extends HotBeverage {
+
+    public Tea(String name, BigDecimal price, double milliliters) {
+        super(name, price, milliliters);
+    }
+}
