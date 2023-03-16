@@ -45,12 +45,14 @@ class Food extends Product {
 }
 
 class Starter extends Food {
+
     public Starter(String name, BigDecimal price, double grams) {
         super(name, price, grams);
     }
 }
 
 class Soup extends Starter {
+
     public Soup(String name, BigDecimal price, double grams) {
         super(name, price, grams);
     }
