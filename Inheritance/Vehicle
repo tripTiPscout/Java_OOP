@@ -1,0 +1,108 @@
+package Advanced;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        FamilyCar familyCar = new FamilyCar(10, 105);
+
+        familyCar.drive(5);
+        System.out.println(familyCar.getFuel());
+
+    }
+
+}
+
+class Vehicle {
+    protected final static double FUEL_CONSUMPTION = 1.25;
+    private double fuelConsumption;
+    private double fuel;
+    private int power;
+
+    public Vehicle(double fuel, int power) {
+        setFuel(fuel);
+        setPower(power);
+        setFuelConsumption(FUEL_CONSUMPTION);
+    }
+
+    public double getFuelConsumption() {
+        return fuelConsumption;
+    }
+
+    public void setFuelConsumption(double fuelConsumption) {
+        this.fuelConsumption = fuelConsumption;
+    }
+
+    public double getFuel() {
+        return fuel;
+    }
+
+    public void setFuel(double fuel) {
+        this.fuel = fuel;
+    }
+
+    public int getPower() {
+        return power;
+    }
+
+    public void setPower(int power) {
+        this.power = power;
+    }
+
+    public void drive(double kilometers) {
+        double usedFuel = kilometers * getFuelConsumption();
+        if (usedFuel <= getFuel()) {
+            setFuel(getFuel() - usedFuel);
+        } else {
+            throw new IllegalArgumentException("Not enough fuel.");
+        }
+    }
+}
+
+class Motorcycle extends Vehicle {
+
+    public Motorcycle(double fuel, int power) {
+        super(fuel, power);
+    }
+}
+
+class Car extends Vehicle {
+
+    protected final static double FUEL_CONSUMPTION = 2.0;
+
+    public Car(double fuel, int power) {
+        super(fuel, power);
+        super.setFuelConsumption(FUEL_CONSUMPTION);
+    }
+}
+
+class RaceMotorcycle extends Motorcycle {
+    protected final static double FUEL_CONSUMPTION = 8.0;
+    public RaceMotorcycle(double fuel, int power) {
+        super(fuel, power);
+        super.setFuelConsumption(FUEL_CONSUMPTION);
+    }
+}
+
+class CrossMotorcycle extends Motorcycle {
+
+    public CrossMotorcycle(double fuel, int power) {
+        super(fuel, power);
+    }
+}
+
+class FamilyCar extends Car {
+
+    public FamilyCar(double fuel, int power) {
+        super(fuel, power);
+    }
+}
+
+class RaceCar extends Car {
+
+    protected final static double FUEL_CONSUMPTION = 10.0;
+    public RaceCar(double fuel, int power) {
+        super(fuel, power);
+        super.setFuelConsumption(FUEL_CONSUMPTION);
+    }
+}
