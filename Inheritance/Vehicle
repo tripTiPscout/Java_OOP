@@ -14,7 +14,7 @@ public class Main {
 }
 
 class Vehicle {
-    protected final static double FUEL_CONSUMPTION = 1.25;
+    private final static double FUEL_CONSUMPTION = 1.25;
     private double fuelConsumption;
     private double fuel;
     private int power;
@@ -68,7 +68,7 @@ class Motorcycle extends Vehicle {
 
 class Car extends Vehicle {
 
-    protected final static double FUEL_CONSUMPTION = 2.0;
+    private final static double FUEL_CONSUMPTION = 2.0;
 
     public Car(double fuel, int power) {
         super(fuel, power);
@@ -77,7 +77,9 @@ class Car extends Vehicle {
 }
 
 class RaceMotorcycle extends Motorcycle {
-    protected final static double FUEL_CONSUMPTION = 8.0;
+
+    private final static double FUEL_CONSUMPTION = 8.0;
+    
     public RaceMotorcycle(double fuel, int power) {
         super(fuel, power);
         super.setFuelConsumption(FUEL_CONSUMPTION);
@@ -100,7 +102,8 @@ class FamilyCar extends Car {
 
 class RaceCar extends Car {
 
-    protected final static double FUEL_CONSUMPTION = 10.0;
+    private final static double FUEL_CONSUMPTION = 10.0;
+    
     public RaceCar(double fuel, int power) {
         super(fuel, power);
         super.setFuelConsumption(FUEL_CONSUMPTION);
