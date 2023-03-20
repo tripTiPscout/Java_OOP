@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        
+
         List<Animal> animals = new ArrayList<>();
 
         String animalInput = scanner.nextLine();
@@ -47,18 +47,13 @@ public class Main {
         String animalName = tokens[1];
         double animalWeight = Double.parseDouble(tokens[2]);
         String animalLivingRegion = tokens[3];
-        switch (animalType) {
-            case "Mouse":
-                return new Mouse(animalName, animalType, animalWeight, animalLivingRegion);
-            case "Cat":
-                return new Cat(animalName, animalType, animalWeight, animalLivingRegion, tokens[4]);
-            case "Zebra":
-                return new Zebra(animalName, animalType, animalWeight, animalLivingRegion);
-            case "Tiger":
-                return new Tiger(animalName, animalType, animalWeight, animalLivingRegion);
-            default:
-                throw new IllegalArgumentException("No such animal");
-        }
+        return switch (animalType) {
+            case "Mouse" -> new Mouse(animalName, animalType, animalWeight, animalLivingRegion);
+            case "Cat" -> new Cat(animalName, animalType, animalWeight, animalLivingRegion, tokens[4]);
+            case "Zebra" -> new Zebra(animalName, animalType, animalWeight, animalLivingRegion);
+            case "Tiger" -> new Tiger(animalName, animalType, animalWeight, animalLivingRegion);
+            default -> throw new IllegalArgumentException("No such animal");
+        };
     }
 }
 
