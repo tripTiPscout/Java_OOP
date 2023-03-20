@@ -63,9 +63,9 @@ public class Main {
 }
 
 abstract class Animal {
-    private String name;
-    private String type;
-    private double weight;
+    private final String name;
+    private final String type;
+    private final double weight;
     private int foodEaten;
 
     public Animal(String name, String type, double weight) {
@@ -99,7 +99,7 @@ abstract class Animal {
 }
 
 abstract class Mammal extends Animal {
-    private String livingRegion;
+    private final String livingRegion;
 
     public Mammal(String name, String type, double weight, String livingRegion) {
         super(name, type, weight);
@@ -187,7 +187,7 @@ class Tiger extends Felime {
 
 class Cat extends Felime {
 
-    private String breed;
+    private final String breed;
 
     public Cat(String name, String type, double weight, String livingRegion, String breed) {
         super(name, type, weight, livingRegion);
