@@ -1,0 +1,236 @@
+package Advanced;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        List<Animal> animals = new ArrayList<>();
+
+        String animalInput = scanner.nextLine();
+        while (!animalInput.equals("End")) {
+            String[] tokens = animalInput.split(" ");
+            Animal animal = createAnimal(tokens);
+
+            String foodInput = scanner.nextLine();
+            Food food = getFood(foodInput.split(" "));
+
+            animal.makeSound();
+            try {
+                animal.eat(food);
+            } catch (IllegalArgumentException ex) {
+                System.out.println(ex.getMessage());
+            }
+
+            animals.add(animal);
+            animalInput = scanner.nextLine();
+        }
+
+        animals.forEach(System.out::println);
+    }
+
+    public static Food getFood(String[] tokens) {
+        String type = tokens[0];
+        int quantity = Integer.parseInt(tokens[1]);
+
+        if (type.equals("Meat")) {
+            return new Meat(quantity);
+        } else return new Vegetable(quantity);
+    }
+
+    public static Animal createAnimal(String[] tokens) {
+        String animalType = tokens[0];
+        String animalName = tokens[1];
+        double animalWeight = Double.parseDouble(tokens[2]);
+        String animalLivingRegion = tokens[3];
+        switch (animalType) {
+            case "Mouse":
+                return new Mouse(animalName, animalType, animalWeight, animalLivingRegion);
+            case "Cat":
+                return new Cat(animalName, animalType, animalWeight, animalLivingRegion, tokens[4]);
+            case "Zebra":
+                return new Zebra(animalName, animalType, animalWeight, animalLivingRegion);
+            case "Tiger":
+                return new Tiger(animalName, animalType, animalWeight, animalLivingRegion);
+            default:
+                throw new IllegalArgumentException("No such animal");
+        }
+    }
+}
+
+abstract class Animal {
+    private String name;
+    private String type;
+    private double weight;
+    private int foodEaten;
+
+    public Animal(String name, String type, double weight) {
+        this.name = name;
+        this.type = type;
+        this.weight = weight;
+        this.foodEaten = 0;
+    }
+
+    public abstract void makeSound();
+
+    public void eat(Food food) {
+        this.foodEaten += food.getQuantity();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public int getFoodEaten() {
+        return foodEaten;
+    }
+}
+
+abstract class Mammal extends Animal {
+    private String livingRegion;
+
+    public Mammal(String name, String type, double weight, String livingRegion) {
+        super(name, type, weight);
+        this.livingRegion = livingRegion;
+    }
+
+    @Override
+    public String toString() {
+        DecimalFormat formatter = new DecimalFormat("##.##");
+        return String.format("%s[%s, %s, %s, %d]", getType(), getName(),
+                formatter.format(getWeight()), this.livingRegion, getFoodEaten());
+    }
+
+    public String getLivingRegion() {
+        return livingRegion;
+    }
+}
+
+class Mouse extends Mammal {
+
+    public Mouse(String name, String type, double weight, String livingRegion) {
+        super(name, type, weight, livingRegion);
+    }
+
+    @Override
+    public void makeSound() {
+        System.out.println("SQUEEEAAAK!");
+    }
+
+    @Override
+    public void eat(Food food) {
+        if (food instanceof Meat) {
+            throw new IllegalArgumentException("Mice are not eating that type of food!");
+        }
+        super.eat(food);
+    }
+}
+
+class Zebra extends Mammal {
+    public Zebra(String name, String type, double weight, String livingRegion) {
+        super(name, type, weight, livingRegion);
+    }
+
+    @Override
+    public void makeSound() {
+        System.out.println("Zs");
+    }
+
+    @Override
+    public void eat(Food food) {
+        if (food instanceof Meat) {
+            throw new IllegalArgumentException("Zebras are not eating that type of food!");
+        }
+        super.eat(food);
+    }
+}
+
+abstract class Felime extends Mammal {
+
+    public Felime(String name, String type, double weight, String livingRegion) {
+        super(name, type, weight, livingRegion);
+    }
+
+}
+
+class Tiger extends Felime {
+
+    public Tiger(String name, String type, double weight, String livingRegion) {
+        super(name, type, weight, livingRegion);
+    }
+
+    @Override
+    public void makeSound() {
+        System.out.println("ROAAR!!!");
+    }
+
+    @Override
+    public void eat(Food food) {
+        if (food instanceof Vegetable) {
+            throw new IllegalArgumentException("Tigers are not eating that type of food!");
+        }
+        super.eat(food);
+    }
+}
+
+class Cat extends Felime {
+
+    private String breed;
+
+    public Cat(String name, String type, double weight, String livingRegion, String breed) {
+        super(name, type, weight, livingRegion);
+        this.breed = breed;
+    }
+
+    @Override
+    public void makeSound() {
+        System.out.println("Meowwww");
+    }
+
+    @Override
+    public String toString() {
+        DecimalFormat formatter = new DecimalFormat("##.##");
+        return String.format("%s[%s, %s, %s, %s, %d]", getType(), getName(), this.breed,
+                formatter.format(getWeight()), getLivingRegion(), getFoodEaten());
+    }
+}
+
+class Food {
+    private int quantity;
+
+    public Food(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+}
+
+class Meat extends Food {
+    public Meat(int quantity) {
+        super(quantity);
+    }
+}
+
+class Vegetable extends Food {
+    public Vegetable(int quantity) {
+        super(quantity);
+    }
+}
