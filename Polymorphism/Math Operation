@@ -6,8 +6,8 @@ public class Main {
         System.out.println(MathOperation.add(2, 5, 3, 1));
 
     }
-
 }
+
 class MathOperation {
 
     public static int add(int f, int s) {
