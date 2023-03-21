@@ -33,26 +33,25 @@ public class Main {
             Vehicle vehicle = vehicles.get(vehicleType);
             try {
                 switch (commandName) {
-                    case "Drive":
+                    case "Drive" -> {
                         double distance = Double.parseDouble(tokens[2]);
                         if (vehicle instanceof Bus) {
                             ((Bus) vehicle).setEmpty(false);
                         }
                         System.out.println(vehicle.drive(distance));
-                        break;
-                    case "Refuel":
+                    }
+                    case "Refuel" -> {
                         double liters = Double.parseDouble(tokens[2]);
                         vehicles.get(vehicleType).refuel(liters);
-                        break;
-                    case "DriveEmpty":
+                    }
+                    case "DriveEmpty" -> {
                         double driveEmptyBusDistance = Double.parseDouble(tokens[2]);
                         if (vehicle instanceof Bus) {
                             ((Bus) vehicle).setEmpty(true);
                         }
                         System.out.println(vehicle.drive(driveEmptyBusDistance));
-                        break;
-                    default:
-                        throw new IllegalArgumentException("No such command");
+                    }
+                    default -> throw new IllegalArgumentException("No such command");
                 }
             } catch (IllegalArgumentException exception) {
                 System.out.println(exception.getMessage());
@@ -66,19 +65,12 @@ public class Main {
         double fuelAmount = Double.parseDouble(tokens[1]);
         double consumption = Double.parseDouble(tokens[2]);
         double tankCapacity = Double.parseDouble(tokens[3]);
-        Vehicle vehicle = null;
-        switch (vehicleType) {
-            case "Car":
-                vehicle = new Car(fuelAmount, consumption, tankCapacity);
-                break;
-            case "Bus":
-                vehicle = new Bus(fuelAmount, consumption, tankCapacity);
-                break;
-            case "Truck":
-                vehicle = new Truck(fuelAmount, consumption, tankCapacity);
-                break;
-        }
-        return vehicle;
+        return switch (vehicleType) {
+            case "Car" -> new Car(fuelAmount, consumption, tankCapacity);
+            case "Bus" -> new Bus(fuelAmount, consumption, tankCapacity);
+            case "Truck" -> new Truck(fuelAmount, consumption, tankCapacity);
+            default -> null;
+        };
     }
 }
 
