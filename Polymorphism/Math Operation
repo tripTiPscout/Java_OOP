@@ -1,0 +1,24 @@
+package Advanced;
+
+public class Main {
+    public static void main(String[] args) {
+
+        System.out.println(MathOperation.add(2, 5, 3, 1));
+
+    }
+
+}
+class MathOperation {
+
+    public static int add(int f, int s) {
+        return f + s;
+    }
+
+    public static int add(int f, int s, int t) {
+        return add(add(f, s), t);
+    }
+
+    public static int add(int f, int s, int t, int fth) {
+        return add(add(f, s, t), fth);
+    }
+}
