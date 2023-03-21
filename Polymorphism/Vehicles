@@ -1,0 +1,204 @@
+package Advanced;
+
+import java.text.DecimalFormat;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String[] tokens = scanner.nextLine().split(" ");
+        Vehicle car = getVehicle(tokens);
+
+        tokens = scanner.nextLine().split(" ");
+        Vehicle truck = getVehicle(tokens);
+
+        tokens = scanner.nextLine().split(" ");
+        Vehicle bus = getVehicle(tokens);
+
+
+        Map<String, Vehicle> vehicles = new LinkedHashMap<>();
+        vehicles.put("Car", car);
+        vehicles.put("Truck", truck);
+        vehicles.put("Bus", bus);
+
+        int n = Integer.parseInt(scanner.nextLine());
+
+        for (int i = 0; i < n; i++) {
+            tokens = scanner.nextLine().split(" ");
+            String commandName = tokens[0];
+            String vehicleType = tokens[1];
+            Vehicle vehicle = vehicles.get(vehicleType);
+            try {
+                switch (commandName) {
+                    case "Drive":
+                        double distance = Double.parseDouble(tokens[2]);
+                        if (vehicle instanceof Bus) {
+                            ((Bus) vehicle).setEmpty(false);
+                        }
+                        System.out.println(vehicle.drive(distance));
+                        break;
+                    case "Refuel":
+                        double liters = Double.parseDouble(tokens[2]);
+                        vehicles.get(vehicleType).refuel(liters);
+                        break;
+                    case "DriveEmpty":
+                        double driveEmptyBusDistance = Double.parseDouble(tokens[2]);
+                        if (vehicle instanceof Bus) {
+                            ((Bus) vehicle).setEmpty(true);
+                        }
+                        System.out.println(vehicle.drive(driveEmptyBusDistance));
+                        break;
+                    default:
+                        throw new IllegalArgumentException("No such command");
+                }
+            } catch (IllegalArgumentException exception) {
+                System.out.println(exception.getMessage());
+            }
+        }
+        vehicles.values().forEach(System.out::println);
+    }
+
+    private static Vehicle getVehicle(String[] tokens) {
+        String vehicleType = tokens[0];
+        double fuelAmount = Double.parseDouble(tokens[1]);
+        double consumption = Double.parseDouble(tokens[2]);
+        double tankCapacity = Double.parseDouble(tokens[3]);
+        Vehicle vehicle = null;
+        switch (vehicleType) {
+            case "Car":
+                vehicle = new Car(fuelAmount, consumption, tankCapacity);
+                break;
+            case "Bus":
+                vehicle = new Bus(fuelAmount, consumption, tankCapacity);
+                break;
+            case "Truck":
+                vehicle = new Truck(fuelAmount, consumption, tankCapacity);
+                break;
+        }
+        return vehicle;
+    }
+}
+
+interface Vehicle {
+    String drive(double distance);
+
+    void refuel(double liters);
+
+}
+
+class VehicleImpl implements Vehicle {
+    private double fuelQuantity;
+    private double fuelConsumption;
+    private double tankCapacity;
+
+    protected VehicleImpl(double fuelQuantity, double fuelConsumption, double tankCapacity) {
+        this.fuelQuantity = fuelQuantity;
+        this.setFuelConsumption(fuelConsumption);
+        this.tankCapacity = tankCapacity;
+    }
+
+    @Override
+    public String drive(double distance) {
+        double fuelNeeded = distance * this.getFuelConsumption();
+        if (fuelNeeded > this.fuelQuantity) {
+            return this.getClass().getSimpleName() + " needs refueling";
+        }
+        this.fuelQuantity -= fuelNeeded;
+
+        DecimalFormat formatter = new DecimalFormat("##.##");
+        return String.format("%s travelled %s km", this.getClass().getSimpleName(), formatter.format(distance));
+    }
+
+    @Override
+    public void refuel(double liters) {
+        if (liters <= 0) {
+            throw new IllegalArgumentException("Fuel must be a positive number");
+        }
+
+        double newFuelQuantity = this.fuelQuantity + liters;
+        if (newFuelQuantity > this.tankCapacity) {
+            throw new IllegalArgumentException("Cannot fit fuel in tank");
+        }
+
+        this.fuelQuantity += liters;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s: %.2f", this.getClass().getSimpleName(), this.fuelQuantity);
+    }
+
+    public double getFuelQuantity() {
+        return fuelQuantity;
+    }
+
+    public void setFuelQuantity(double fuelQuantity) {
+        this.fuelQuantity = fuelQuantity;
+    }
+
+    public double getFuelConsumption() {
+        return fuelConsumption;
+    }
+
+    public void setFuelConsumption(double fuelConsumption) {
+        this.fuelConsumption = fuelConsumption;
+    }
+}
+
+class Truck extends VehicleImpl {
+    private static final double AC_ADDITIONAL_CONSUMPTION = 1.6;
+    private static final double REFILL_PERCENTAGE = 0.95;
+
+    public Truck(double fuelQuantity, double fuelConsumption, double tankCapacity) {
+        super(fuelQuantity, fuelConsumption, tankCapacity);
+    }
+
+    @Override
+    public void setFuelConsumption(double fuelConsumption) {
+        super.setFuelConsumption(fuelConsumption + AC_ADDITIONAL_CONSUMPTION);
+    }
+
+    @Override
+    public void refuel(double liters) {
+        super.refuel(liters * REFILL_PERCENTAGE);
+    }
+}
+
+class Car extends VehicleImpl {
+    private static final double AC_ADDITIONAL_CONSUMPTION = 0.9;
+
+    public Car(double fuelQuantity, double fuelConsumption, double tankCapacity) {
+        super(fuelQuantity, fuelConsumption, tankCapacity);
+    }
+
+    @Override
+    public void setFuelConsumption(double fuelConsumption) {
+        super.setFuelConsumption(fuelConsumption + AC_ADDITIONAL_CONSUMPTION);
+    }
+}
+
+class Bus extends VehicleImpl {
+    private static final double AC_ADDITIONAL_CONSUMPTION = 1.4;
+    private boolean isEmpty;
+
+    public Bus(double fuelQuantity, double fuelConsumption, double tankCapacity) {
+        super(fuelQuantity, fuelConsumption, tankCapacity);
+        isEmpty = true;
+    }
+
+    public void setEmpty(boolean empty) {
+
+        if (this.isEmpty && !empty) {
+            super.setFuelConsumption(super.getFuelConsumption() + AC_ADDITIONAL_CONSUMPTION);
+        }
+
+        if (!this.isEmpty && empty) {
+            super.setFuelConsumption(super.getFuelConsumption() - AC_ADDITIONAL_CONSUMPTION);
+        }
+
+        this.isEmpty = empty;
+    }
+}
