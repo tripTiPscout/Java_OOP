@@ -1,0 +1,55 @@
+package Advanced;
+
+public class Main {
+    public static void main(String[] args) {
+
+        DrawingManager drawingManager = new DrawingManagerImpl();
+
+        drawingManager.draw(new Circle());
+        drawingManager.draw(new Rectangle());
+        drawingManager.draw(new Triangle());
+
+    }
+
+}
+
+interface Shape {
+    void draw();
+}
+
+class Circle implements Shape {
+
+    @Override
+    public void draw() {
+        System.out.println("Circle");
+    }
+}
+
+class Rectangle implements Shape {
+
+    @Override
+    public void draw() {
+        System.out.println("Rectangle");
+    }
+}
+
+class Triangle implements Shape {
+
+    @Override
+    public void draw() {
+        System.out.println("Triangle");
+    }
+}
+
+interface DrawingManager {
+    void draw(Shape shape);
+}
+
+class DrawingManagerImpl implements DrawingManager {
+
+    @Override
+    public void draw(Shape shape) {
+        shape.draw();
+    }
+
+}
