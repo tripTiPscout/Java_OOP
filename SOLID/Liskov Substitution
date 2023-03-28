@@ -1,0 +1,196 @@
+package OOP;
+
+public class Main {
+    public static void main(String[] args) {
+        
+        PrintManager manager = new PrintManagerImpl();
+
+        Square square = new Square(5);
+        System.out.println(square.getArea());
+        square.print();
+        manager.print(square);
+
+        Rectangle rectangle = new Rectangle(10, 8);
+        System.out.println(rectangle.getArea());
+        rectangle.print();
+        manager.print(rectangle);
+
+        Shape triangle = new Triangle(4, 13, 15);
+        System.out.println(triangle.getArea());
+        triangle.print();
+        manager.print(triangle);
+
+        System.out.println(square.getHeight());
+        System.out.println(rectangle.getHeight());
+    }
+}
+
+interface PrintManager {
+    
+    void print(Shape shape);
+}
+
+
+class PrintManagerImpl implements PrintManager {
+
+    @Override
+    public void print(Shape shape) {
+        shape.print();
+    }
+}
+
+
+abstract class Shape extends PrintManagerImpl {
+
+    public abstract double getArea();
+    public abstract void print();
+}
+
+class Rectangle extends Shape {
+    
+    private double height;
+    private double width;
+
+    public Rectangle(double height, double width) {
+        this.setHeight(height);
+        this.setWidth(width);
+    }
+
+    public double getHeight() {
+        return this.height;
+    }
+
+    public double getWidth() {
+        return this.width;
+    }
+
+    public void setHeight(double height) {
+        SideValidator.validate(height, "rectangle");
+        this.height = height;
+    }
+
+    public void setWidth(double width) {
+        SideValidator.validate(width, "rectangle");
+        if (width == this.getHeight()) {
+            throw new IllegalArgumentException("Height and width should not be equal.");
+        }
+        this.width = width;
+    }
+
+    @Override
+    public void print() {
+        System.out.println("I am a rectangle with height " + this.getHeight() + " and width " + this.getWidth());
+    }
+
+    @Override
+    public double getArea() {
+        return this.height * this.width;
+    }
+}
+
+class Square extends Rectangle {
+
+    private double side;
+
+    public Square(double side) {
+        super(side, side);
+        this.side = side;
+    }
+
+    @Override
+    public double getWidth() {
+        return this.side;
+    }
+
+    @Override
+    public double getHeight() {
+        return this.side;
+    }
+
+    @Override
+    public void setHeight(double side) {
+        SideValidator.validate(side, "square");
+        this.side = side;
+    }
+
+    @Override
+    public void setWidth(double side) {
+        SideValidator.validate(side, "square");
+        this.side = side;
+    }
+
+    @Override
+    public void print() {
+        System.out.println("I am a square with sides " + this.getWidth() + " to " + this.getHeight());
+    }
+
+    @Override
+    public double getArea() {
+        return this.side * this.side;
+    }
+}
+
+class Triangle extends Shape {
+
+    private double sideA;
+    private double sideB;
+    private double sideC;
+
+    public Triangle(double sideA, double sideB, double sideC) {
+        this.setSideA(sideA);
+        this.setSideB(sideB);
+        this.setSideC(sideC);
+    }
+
+    public double getSideA() {
+        return this.sideA;
+    }
+
+    public double getSideB() {
+        return this.sideB;
+    }
+
+    public double getSideC() {
+        return this.sideC;
+    }
+
+    public void setSideA(double sideA) {
+        SideValidator.validate(sideA, "triangle");
+        this.sideA = sideA;
+    }
+
+    public void setSideB(double sideB) {
+        SideValidator.validate(sideB, "triangle");
+        this.sideB = sideB;
+    }
+
+    public void setSideC(double sideC) {
+        SideValidator.validate(sideC, "triangle");
+        this.sideC = sideC;
+    }
+
+    public double perimeter() {
+        return this.sideA + this.sideB + this.sideC;
+    }
+
+    @Override
+    public double getArea() {
+        double pPer = this.perimeter() / 2;
+        return Math.sqrt(pPer * (pPer - this.sideA) * (pPer - this.sideB) * (pPer - this.sideC));
+    }
+
+    @Override
+    public void print() {
+        System.out.println("I am a triangle with sides " + this.getSideA() + ", "
+                + this.getSideB() + " and " + this.getSideC());
+    }
+}
+
+class SideValidator {
+    
+    public static void validate(double side, String shape) {
+        if (side <= 0) {
+            throw new IllegalArgumentException("Side of " + shape + " should be greater by 0.");
+        }
+    }
+}
