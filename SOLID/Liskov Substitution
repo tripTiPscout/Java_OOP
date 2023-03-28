@@ -1,8 +1,7 @@
 package OOP;
 
 public class Main {
-    public static void main(String[] args) {
-        
+    public static void main(String[] args) {    
         PrintManager manager = new PrintManagerImpl();
 
         Square square = new Square(5);
@@ -25,14 +24,12 @@ public class Main {
     }
 }
 
-interface PrintManager {
-    
+interface PrintManager {   
     void print(Shape shape);
 }
 
 
 class PrintManagerImpl implements PrintManager {
-
     @Override
     public void print(Shape shape) {
         shape.print();
@@ -41,13 +38,11 @@ class PrintManagerImpl implements PrintManager {
 
 
 abstract class Shape extends PrintManagerImpl {
-
     public abstract double getArea();
     public abstract void print();
 }
 
-class Rectangle extends Shape {
-    
+class Rectangle extends Shape {    
     private double height;
     private double width;
 
@@ -89,7 +84,6 @@ class Rectangle extends Shape {
 }
 
 class Square extends Rectangle {
-
     private double side;
 
     public Square(double side) {
@@ -131,7 +125,6 @@ class Square extends Rectangle {
 }
 
 class Triangle extends Shape {
-
     private double sideA;
     private double sideB;
     private double sideC;
@@ -186,8 +179,7 @@ class Triangle extends Shape {
     }
 }
 
-class SideValidator {
-    
+class SideValidator {    
     public static void validate(double side, String shape) {
         if (side <= 0) {
             throw new IllegalArgumentException("Side of " + shape + " should be greater by 0.");
