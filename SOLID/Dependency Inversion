@@ -1,4 +1,4 @@
-package Training;
+package OOP;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -17,10 +17,6 @@ public class Main {
 class DataRepository<T> {
 
     private Collection<T> data;
-
-    public DataRepository() {
-        this.data = new ArrayList<>();
-    }
 
     public DataRepository(Collection<T> data) {
         this.data = data;
