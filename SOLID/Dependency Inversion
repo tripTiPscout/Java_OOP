@@ -1,0 +1,28 @@
+package Training;
+
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+
+public class Main {
+    public static void main(String[] args) {
+
+        new DataRepository<>(new ArrayDeque<>());
+        new DataRepository<>(new ArrayList<>());
+        new DataRepository<>(new HashSet<>());
+    }
+}
+
+class DataRepository<T> {
+
+    private Collection<T> data;
+
+    public DataRepository() {
+        this.data = new ArrayList<>();
+    }
+
+    public DataRepository(Collection<T> data) {
+        this.data = data;
+    }
+}
