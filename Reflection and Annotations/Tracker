@@ -1,0 +1,152 @@
+package Training;
+
+import java.io.Serializable;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class Training {
+
+    public static void main(String[] args) {
+
+
+
+    }
+
+}
+
+class Main {
+
+    @Author(name = "George")
+    public static void main(String[] args) {
+
+        Tracker.printMethodByAuthor(Main.class);
+
+        Tracker.printMethodByAuthor(Tracker.class);
+
+
+
+        // additional code annotated methods in Reflection class
+
+        Class<Reflection> clazz = Reflection.class;
+
+        List<Author> annotated = Arrays.stream(clazz.getDeclaredMethods())
+                .filter(method -> method.getAnnotation(Author.class) != null)
+                .map(method -> method.getAnnotation(Author.class))
+                .toList();
+
+        annotated.forEach(annotation -> System.out.println(annotation.name()));
+        annotated.forEach(System.out::println);
+
+    }
+
+}
+
+class Reflection implements Serializable {
+
+    private static final String nickName = "Pinguin";
+    public String name;
+    protected String webAddress;
+    String email;
+    private int zip;
+
+    public Reflection() {
+        this.setName("Java");
+        this.setWebAddress("oracle.com");
+        this.setEmail("mail@oracle.com");
+        this.setZip(1407);
+    }
+
+    private Reflection(String name, String webAddress, String email) {
+        this.setName(name);
+        this.setWebAddress(webAddress);
+        this.setEmail(email);
+        this.setZip(2300);
+    }
+
+    protected Reflection(String name, String webAddress, String email, int zip) {
+        this.setName(name);
+        this.setWebAddress(webAddress);
+        this.setEmail(email);
+        this.setZip(2300);
+    }
+
+    @Author(name = "unknown")
+    public final String getName() {
+        return name;
+    }
+
+    private void setName(String name) {
+        this.name = name;
+    }
+
+    @Author(name = "Valentina")
+    protected String getWebAddress() {
+        return webAddress;
+    }
+
+    private void setWebAddress(String webAddress) {
+        this.webAddress = webAddress;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @Author(name = "Peter")
+    protected final int getZip() {
+        return zip;
+    }
+
+    private void setZip(int zip) {
+        this.zip = zip;
+    }
+
+    @Author(name = "IntelliJ")
+    @Override
+    public String toString() {
+        String result = "Name: " + getName() + "\n";
+        result += "WebAddress: " + getWebAddress() + "\n";
+        result += "email: " + getEmail() + "\n";
+        result += "zip: " + getZip() + "\n";
+        return result;
+    }
+}
+class Tracker {
+
+    @Author(name = "Peter")
+    public static void printMethodByAuthor(Class<?> clazz) {
+        Map<String, List<String>> methodsByAuthor = new HashMap<>();
+        Method[] methods = clazz.getDeclaredMethods();
+
+        for (Method method : methods) {
+            Author annotation = method.getAnnotation(Author.class);
+            if (annotation != null) {
+                methodsByAuthor
+                        .putIfAbsent(annotation.name(), new ArrayList<>());
+                methodsByAuthor
+                        .get(annotation.name()).add(method.getName() + "()");
+            }
+        }
+
+        methodsByAuthor.forEach((key, value) -> System.out.print(key + ": " + value.get(0) + System.lineSeparator()));
+    }
+}
+
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+@interface Author {
+
+    String name();
+}
