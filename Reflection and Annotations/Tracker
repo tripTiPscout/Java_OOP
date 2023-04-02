@@ -22,8 +22,7 @@ public class Main {
         Tracker.printMethodByAuthor(Tracker.class);
 
 
-
-        // additional code annotated methods in Reflection class
+        // additional code: annotated methods in Reflection class
 
         Class<Reflection> clazz = Reflection.class;
 
@@ -33,8 +32,6 @@ public class Main {
                 .toList();
 
         annotated.forEach(annotation -> System.out.println(annotation.name()));
-        annotated.forEach(System.out::println);
-
     }
 
 }
@@ -113,6 +110,7 @@ class Reflection implements Serializable {
         return result;
     }
 }
+
 class Tracker {
 
     @Author(name = "Peter")
