@@ -1,4 +1,4 @@
-package Training;
+package OOP;
 
 import java.io.Serializable;
 import java.lang.annotation.ElementType;
@@ -12,17 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Training {
-
-    public static void main(String[] args) {
-
-
-
-    }
-
-}
-
-class Main {
+public class Main {
 
     @Author(name = "George")
     public static void main(String[] args) {
