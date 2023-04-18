@@ -1,0 +1,35 @@
+package Advanced;
+
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        testTryCatchFinally();
+
+    }
+
+    private static void testTryCatchFinally() {
+        
+        System.out.println("Code executed before try-catch-finally");   // this print always
+        try {
+            String str = new Scanner(System.in).nextLine();
+            Integer.parseInt(str);
+            
+            System.out.println("Parsing successful.");
+            
+            return; // Exit from the method
+            
+        } catch (NumberFormatException exception) {
+            
+            System.out.println("Parsing failed!");   // this print if parsing not successful
+        } finally {
+            
+            System.out.println("Code always executed.");   // this print always
+        }
+        
+        System.out.println("Code executed after try-catch-finally");   // if "Parsing successful." this will NOT print
+    }
+
+}
