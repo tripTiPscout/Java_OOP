@@ -1,0 +1,54 @@
+package Advanced;
+
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        boolean succeeded = false;
+
+        while (!succeeded) {
+            try {
+                succeeded = printRangeOgTwoNumbers(scanner);
+            } catch (InvalidNumberInputException exception) {
+                System.out.println(exception.getMessage());
+            }
+        }
+    }
+
+    private static boolean printRangeOgTwoNumbers(Scanner scanner) {
+        try {
+            int[] numbers = readTwoNumbers(scanner);
+            printRange(numbers[0], numbers[1]);
+            return true;
+        } catch (NumberFormatException exception) {
+            throw new InvalidNumberInputException("Invalid input. Please try again.");
+        }
+    }
+
+    public static int[] readTwoNumbers(Scanner scanner) {
+        int[] res = new int[2];
+        res[0] = readSingleNumber(scanner);
+        res[1] = readSingleNumber(scanner);
+        return res;
+    }
+
+    private static int readSingleNumber(Scanner scanner) {
+        return Integer.parseInt(scanner.nextLine());
+    }
+
+    private static void printRange(int start, int end) {
+        for (int i = start; i <= end; i++) {
+            System.out.println(i);
+        }
+    }
+
+}
+
+class InvalidNumberInputException extends RuntimeException {
+    public InvalidNumberInputException(String message) {
+        super(message);
+    }
+}
